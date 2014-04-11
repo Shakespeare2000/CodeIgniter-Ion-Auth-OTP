@@ -1039,14 +1039,12 @@ class Ion_auth_model extends CI_Model
 
 		if (empty($identity) || empty($token) ||empty($secret_key))
 		{
-			log_message('error', 'gauth_login: identity, token or secret key empty');
 			$this->set_error('login_unsuccessful');
 			return FALSE;
 		}
 
 		$this->trigger_events('extra_where');
 
-		log_message('error', 'gauth_login: Get identity from database');
 		$query = $this->db->select($this->identity_column . ', username, email, id, gauth, gauth_login_code, last_login')
 		                  ->where($this->identity_column, $this->db->escape_str($identity))
 		                  ->limit(1)
@@ -1054,11 +1052,9 @@ class Ion_auth_model extends CI_Model
 
 		if ($query->num_rows() === 1)
 		{
-			log_message('error', 'gauth_login: Number of rows is 1');
 			$user = $query->row();
 			if($this->is_gauth_secret_key_valid($user->gauth_login_code, $secret_key))
 			{
-				log_message('error', 'gauth_login: Gauth secret key valid');
 				$token = $this->is_gauth_token_valid($user->gauth, $token);
 
 				if ($token === TRUE)
@@ -1080,10 +1076,8 @@ class Ion_auth_model extends CI_Model
 
 					return TRUE;
 				}
-				log_message('error', 'gauth_login: Gauth token invalid');
 				return FALSE;
 			}
-			log_message('error', 'gauth_login: Gauth secret key invalid');
 			return FALSE;
 		}
 
