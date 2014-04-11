@@ -153,15 +153,13 @@ class Ion_auth
 			}
 			else
 			{
-				//Add gauth errors
-				#$this->set_error('forgot_password_unsuccessful');
+				$this->set_error('gauth_activation_key_unsuccessful');
 				return FALSE;
 			}
 		}
 		else
 		{
-			//Add gauth errors
-			#$this->set_error('forgot_password_unsuccessful');
+			$this->set_error('gauth_activation_key_unsuccessful');
 			return FALSE;
 		}
 	}

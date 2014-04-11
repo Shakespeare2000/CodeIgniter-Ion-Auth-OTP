@@ -1039,7 +1039,7 @@ class Ion_auth_model extends CI_Model
 
 		if (empty($identity) || empty($token) ||empty($secret_key))
 		{
-			$this->set_error('login_unsuccessful');
+			$this->set_error('gauth_login_unsuccessful');
 			return FALSE;
 		}
 
@@ -1059,7 +1059,6 @@ class Ion_auth_model extends CI_Model
 
 				if ($token === TRUE)
 				{
-					log_message('error', 'gauth_login: Gauth token valid');
 					$this->set_session($user);
 
 					$this->update_last_login($user->id);
@@ -1074,20 +1073,15 @@ class Ion_auth_model extends CI_Model
 					$this->trigger_events(array('post_login', 'post_login_successful'));
 					$this->set_message('login_successful');
 
-					return TRUE;
 				}
-				return FALSE;
 			}
-			return FALSE;
 		}
 
 		//Hash something anyway, just to take up time
 		$this->hash_password($token);
 
-		$this->increase_login_attempts($identity);
-
 		$this->trigger_events('post_login_unsuccessful');
-		$this->set_error('login_unsuccessful');
+		$this->set_error('gauth_login_unsuccessful');
 
 		return FALSE;
 	}
@@ -1102,16 +1096,13 @@ class Ion_auth_model extends CI_Model
 		if ($this->gauth['enabled']) {
 			if (empty($stored_code) && empty($user_token))
 			{
-				log_message('error', 'is_gauth_token_valid: stored_code or user_token empty');
 				return FALSE;
 			}
 			if($this->google_authenticator->verify_code($stored_key, $user_token))
 			{
 				return TRUE;
 			}
-			return FALSE;
 		}
-		log_message('error', 'is_gauth_token_valid: Gauth isn\'t enabled');
 		return FALSE;
 	}
 
@@ -1131,7 +1122,6 @@ class Ion_auth_model extends CI_Model
 			{
 				return TRUE;
 			}
-			return FALSE;
 		}
 		return FALSE;
 	}
@@ -1156,7 +1146,6 @@ class Ion_auth_model extends CI_Model
 				{
 					return TRUE;
 				}
-				return FALSE;
 			}
 		}
 		return FALSE;
