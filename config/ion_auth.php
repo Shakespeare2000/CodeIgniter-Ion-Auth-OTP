@@ -99,6 +99,21 @@ $config['maximum_login_attempts']     = 3;                   // The maximum numb
 $config['lockout_time']               = 600;                 // The number of seconds to lockout an account due to exceeded attempts
 $config['forgot_password_expiration'] = 0;                   // The number of milliseconds after which a forgot password request will expire. If set to 0, forgot password requests will not expire.
 
+/*
+ | -------------------------------------------------------------------------
+ | Multi-step authentication options.
+ | -------------------------------------------------------------------------
+ |
+ | text..
+ | ..to change
+ */
+$config['gauth']['enabled']			= TRUE;			// If you want to use multi-step authentication
+$config['gauth']['interval']		= 30; 			// The number of seconds between each token. Standard is 30s
+$config['gauth']['secret_length']	= 16; 			// Length of secret key shared between you and client
+$config['gauth']['time_fix'] 		= FALSE; 		// Sometimes gauth generates one token too fast. If so, set to TRUE
+$config['gauth']['issuer'] 			= "Ion_auth"; 	// Provider shown on Google Authenticator mobile app
+
+
 
 /*
  | -------------------------------------------------------------------------

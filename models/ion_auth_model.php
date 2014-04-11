@@ -173,6 +173,7 @@ class Ion_auth_model extends CI_Model
 		$this->load->config('ion_auth', TRUE);
 		$this->load->helper('cookie');
 		$this->load->helper('date');
+		$this->load->library('google_authenticator');
 		$this->lang->load('ion_auth');
 
 		//initialize db tables data
@@ -183,6 +184,7 @@ class Ion_auth_model extends CI_Model
 		$this->store_salt      = $this->config->item('store_salt', 'ion_auth');
 		$this->salt_length     = $this->config->item('salt_length', 'ion_auth');
 		$this->join			   = $this->config->item('join', 'ion_auth');
+		$this->gauth		   = $this->config->item('gauth', 'ion_auth');
 
 
 		//initialize hash method options (Bcrypt)
@@ -510,7 +512,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * reset password
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function reset_password($identity, $new) {
@@ -569,7 +571,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * change password
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function change_password($identity, $old, $new)
@@ -627,7 +629,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * Checks username
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function username_check($username = '')
@@ -648,7 +650,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * Checks email
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function email_check($email = '')
@@ -669,7 +671,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * Identity check
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function identity_check($identity = '')
@@ -686,9 +688,80 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	 * Insert a gauth login activation key.
+	 *
+	 * @return boolean
+	 * @author Mathew, Ryan and SpyTec 
+	 **/
+	public function set_gauth_login_activation($identity)
+	{
+		if (empty($identity))
+		{
+			//Change to gauth_login_activation please!
+			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			return FALSE;
+		}
+
+		//All some more randomness
+		$activation_code_part = "";
+		if(function_exists("openssl_random_pseudo_bytes")) {
+			$activation_code_part = openssl_random_pseudo_bytes(128);
+		}
+
+		for($i=0;$i<1024;$i++) {
+			$activation_code_part = sha1($activation_code_part . mt_rand() . microtime());
+		}
+
+		$key = $this->hash_code($activation_code_part.$identity);
+
+		$this->forgotten_password_code = $key;
+
+		$this->trigger_events('extra_where');
+
+		//Possibly add an expire?
+		$update['gauth_login_code'] = $key;
+
+		$this->db->update($this->tables['users'], $update, array($this->identity_column => $identity));
+
+		$return = $this->db->affected_rows() == 1;
+
+		//Change to gauth_login_activation please!
+		/*if ($return)
+			$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_successful'));
+		else
+			$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));*/
+
+		return $return;
+	}
+
+	/**
+	 * Insert a gauth login activation key.
+	 *
+	 * @return boolean
+	 * @author Mathew, Ryan and SpyTec 
+	 **/
+	public function get_gauth_login_activation($identity)
+	{
+		if (empty($identity))
+		{
+			//Change to gauth_login_activation please!
+			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			return FALSE;
+		}
+
+		$this->db->where($this->identity_column, $identity);
+		$this->db->select('gauth_login_code');
+		$query = $this->db->get('users');
+
+		$return = $query->row();
+
+		return $return->gauth_login_code;
+	}
+
+	/**
 	 * Insert a forgotten password key.
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 * @updated Ryan
 	 * @updated 52aa456eef8b60ad6754b31fbdcc77bb
@@ -786,7 +859,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * register
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function register($username, $password, $email, $additional_data = array(), $groups = array())
@@ -874,7 +947,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * login
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Mathew
 	 **/
 	public function login($identity, $password, $remember=FALSE)
@@ -889,7 +962,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', username, email, id, password, active, last_login')
+		$query = $this->db->select($this->identity_column . ', username, email, id, password, gauth, active, last_login')
 		                  ->where($this->identity_column, $this->db->escape_str($identity))
 		                  ->limit(1)
 		                  ->get($this->tables['users']);
@@ -921,19 +994,23 @@ class Ion_auth_model extends CI_Model
 					return FALSE;
 				}
 
-				$this->set_session($user);
-
-				$this->update_last_login($user->id);
-
-				$this->clear_login_attempts($identity);
-
-				if ($remember && $this->config->item('remember_users', 'ion_auth'))
+				//Check database if multi-factor auth is set and avoid updating database settings
+				if ($user->gauth === NULL)
 				{
-					$this->remember_user($user->id);
-				}
+					$this->set_session($user);
 
-				$this->trigger_events(array('post_login', 'post_login_successful'));
-				$this->set_message('login_successful');
+					$this->update_last_login($user->id);
+
+					$this->clear_login_attempts($identity);
+
+					if ($remember && $this->config->item('remember_users', 'ion_auth'))
+					{
+						$this->remember_user($user->id);
+					}
+
+					$this->trigger_events(array('post_login', 'post_login_successful'));
+					$this->set_message('login_successful');
+				}
 
 				return TRUE;
 			}
@@ -947,6 +1024,147 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('post_login_unsuccessful');
 		$this->set_error('login_unsuccessful');
 
+		return FALSE;
+	}
+
+
+	/**
+	 * Login continuation with two-step authentication
+	 *
+	 * @return boolean
+	 * @author Mathew and SpyTec
+	 **/
+	public function gauth_login($identity, $token, $remember=FALSE, $secret_key){
+		$this->trigger_events('pre_login');
+
+		if (empty($identity) || empty($token) ||empty($secret_key))
+		{
+			log_message('error', 'gauth_login: identity, token or secret key empty');
+			$this->set_error('login_unsuccessful');
+			return FALSE;
+		}
+
+		$this->trigger_events('extra_where');
+
+		log_message('error', 'gauth_login: Get identity from database');
+		$query = $this->db->select($this->identity_column . ', username, email, id, gauth, gauth_login_code, last_login')
+		                  ->where($this->identity_column, $this->db->escape_str($identity))
+		                  ->limit(1)
+		                  ->get($this->tables['users']);
+
+		if ($query->num_rows() === 1)
+		{
+			log_message('error', 'gauth_login: Number of rows is 1');
+			$user = $query->row();
+			if($this->is_gauth_secret_key_valid($user->gauth_login_code, $secret_key))
+			{
+				log_message('error', 'gauth_login: Gauth secret key valid');
+				$token = $this->is_gauth_token_valid($user->gauth, $token);
+
+				if ($token === TRUE)
+				{
+					log_message('error', 'gauth_login: Gauth token valid');
+					$this->set_session($user);
+
+					$this->update_last_login($user->id);
+
+					$this->clear_login_attempts($identity);
+
+					if ($remember && $this->config->item('remember_users', 'ion_auth'))
+					{
+						$this->remember_user($user->id);
+					}
+
+					$this->trigger_events(array('post_login', 'post_login_successful'));
+					$this->set_message('login_successful');
+
+					return TRUE;
+				}
+				log_message('error', 'gauth_login: Gauth token invalid');
+				return FALSE;
+			}
+			log_message('error', 'gauth_login: Gauth secret key invalid');
+			return FALSE;
+		}
+
+		//Hash something anyway, just to take up time
+		$this->hash_password($token);
+
+		$this->increase_login_attempts($identity);
+
+		$this->trigger_events('post_login_unsuccessful');
+		$this->set_error('login_unsuccessful');
+
+		return FALSE;
+	}
+
+	/**
+	 * Check if token is valid
+	 *
+	 * @return boolean
+	 * @author Mathew and SpyTec
+	 **/
+	public function is_gauth_token_valid($stored_key, $user_token){
+		if ($this->gauth['enabled']) {
+			if (empty($stored_code) && empty($user_token))
+			{
+				log_message('error', 'is_gauth_token_valid: stored_code or user_token empty');
+				return FALSE;
+			}
+			if($this->google_authenticator->verify_code($stored_key, $user_token))
+			{
+				return TRUE;
+			}
+			return FALSE;
+		}
+		log_message('error', 'is_gauth_token_valid: Gauth isn\'t enabled');
+		return FALSE;
+	}
+
+	/**
+	 * Check if secret login key is valid
+	 *
+	 * @return boolean
+	 * @author Mathew and SpyTec
+	 **/
+	public function is_gauth_secret_key_valid($stored_code, $user_code){
+		if ($this->gauth['enabled']) {
+			if (empty($stored_code) && empty($user_code))
+			{
+				return FALSE;
+			}
+			if($stored_code === $user_code)
+			{
+				return TRUE;
+			}
+			return FALSE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Checks if user has two-step authentication enabled
+	 *
+	 * @return boolean
+	 * @author SpyTec
+	 **/
+	public function is_gauth_set($identity){
+		if ($this->gauth['enabled']) {
+			
+			$this->db->select('gauth');
+			$this->db->where($this->identity_column , $this->db->escape_str($identity));
+			$query = $this->db->get($this->tables['users']);
+
+			if ($query->num_rows() === 1)
+			{
+				$user = $query->row();
+				if($user->gauth !== NULL)
+				{
+					return TRUE;
+				}
+				return FALSE;
+			}
+		}
 		return FALSE;
 	}
 
@@ -1317,7 +1535,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * add_to_group
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Ben Edmunds
 	 **/
 	public function add_to_group($group_id, $user_id=false)
@@ -1348,7 +1566,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * remove_from_group
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Ben Edmunds
 	 **/
 	public function remove_from_group($group_ids=false, $user_id=false)
@@ -1458,7 +1676,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * update
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Phil Sturgeon
 	 **/
 	public function update($id, array $data)
@@ -1521,7 +1739,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	* delete_user
 	*
-	* @return bool
+	* @return boolean
 	* @author Phil Sturgeon
 	**/
 	public function delete_user($id)
@@ -1560,7 +1778,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * update_last_login
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Ben Edmunds
 	 **/
 	public function update_last_login($id)
@@ -1579,7 +1797,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * set_lang
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Ben Edmunds
 	 **/
 	public function set_lang($lang = 'en')
@@ -1609,7 +1827,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * set_session
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author jrmadsen67
 	 **/
 	public function set_session($user)
@@ -1635,7 +1853,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * remember_user
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Ben Edmunds
 	 **/
 	public function remember_user($id)
@@ -1689,7 +1907,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * login_remembed_user
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author Ben Edmunds
 	 **/
 	public function login_remembered_user()
@@ -1778,7 +1996,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	 * update_group
 	 *
-	 * @return bool
+	 * @return boolean
 	 * @author aditya menon
 	 **/
 	public function update_group($group_id = FALSE, $group_name = FALSE, $additional_data = array())
@@ -1823,7 +2041,7 @@ class Ion_auth_model extends CI_Model
 	/**
 	* delete_group
 	*
-	* @return bool
+	* @return boolean
 	* @author aditya menon
 	**/
 	public function delete_group($group_id = FALSE)

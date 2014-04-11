@@ -59,6 +59,7 @@ class Ion_auth
 	{
 		$this->load->config('ion_auth', TRUE);
 		$this->load->library('email');
+		$this->load->library('google_authenticator');
 		$this->lang->load('ion_auth');
 		$this->load->helper('cookie');
 		$this->load->helper('language');
@@ -130,7 +131,41 @@ class Ion_auth
 		return get_instance()->$var;
 	}
 
+	/**
+	 * Generates a code that stores in database.
+	 * Could be used with flashdata to redirect to another loginform with login data and send securely with custom login token
+	 *
+	 * Possibly useless
+	 *
+	 * @return void
+	 * @author Mathew and SpyTec
+	 **/
+	public function set_gauth_login_activation($identity)
+	{
+		if ( $this->ion_auth_model->set_gauth_login_activation($identity) )
+		{
+			// Get user information
+            $user = $this->where($this->config->item('identity', 'ion_auth'), $identity)->where('active', 1)->users()->row();  //changed to get_user_by_identity from email
 
+			if ($user)
+			{
+				return $this->ion_auth_model->get_gauth_login_activation($identity);
+			}
+			else
+			{
+				//Add gauth errors
+				#$this->set_error('forgot_password_unsuccessful');
+				return FALSE;
+			}
+		}
+		else
+		{
+			//Add gauth errors
+			#$this->set_error('forgot_password_unsuccessful');
+			return FALSE;
+		}
+	}
+	
 	/**
 	 * forgotten password feature
 	 *

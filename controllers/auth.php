@@ -68,6 +68,22 @@ class Auth extends CI_Controller {
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
 			{
+				if ($this->ion_auth->is_gauth_set($this->input->post('identity')))
+				{
+					// ****** Get secret key from database ********
+					$activation_code = $this->ion_auth->set_gauth_login_activation($this->input->post('identity'));
+					if($activation_code)
+					{
+						$this->session->set_flashdata('gauth_login_key', $activation_code);
+						$this->session->set_flashdata('identity', $this->input->post('identity'));
+						$this->session->set_flashdata('remember_me', $remember);
+						redirect('auth/login_gauth', 'refresh'); //use redirects instead of loading views for compatibility with MY_Controller libraries
+					}
+					//if the set activation was un-successful
+					//redirect them back to the login page
+					$this->session->set_flashdata('message', $this->ion_auth->errors());
+					redirect('auth/login', 'refresh'); //use redirects instead of loading views for compatibility with MY_Controller libraries
+				}
 				//if the login is successful
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
@@ -98,6 +114,81 @@ class Auth extends CI_Controller {
 			);
 
 			$this->_render_page('auth/login', $this->data);
+		}
+	}
+
+	//login with two-step authentication
+	function login_gauth()
+	{
+		$this->data['title'] = "Login";
+
+		//validate form input
+		$this->form_validation->set_rules('token'			, 'Token'		, 'required');
+		$this->form_validation->set_rules('remember'		, 'Remember Me'	, '');
+		$this->form_validation->set_rules('identity'		, 'Identity'	, 'required');
+		$this->form_validation->set_rules('gauth_login_key'	, 'Login key'	, 'required');
+
+		if ($this->form_validation->run() == true)
+		{
+			$remember = (bool) $this->input->post('remember');
+
+			if ($this->ion_auth->is_gauth_set($this->input->post('identity')))
+			{
+				if ($this->ion_auth->gauth_login($this->input->post('identity'), $this->input->post('token'), $remember, $this->input->post('gauth_login_key')))
+				{
+					//if the login is successful
+					//redirect them back to the home page
+					$this->session->set_flashdata('message', $this->ion_auth->messages());
+					redirect('/', 'refresh');
+				}
+				else
+				{
+				//if the login was un-successful
+				//redirect them back to the login page
+				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				redirect('auth/login', 'refresh'); //use redirects instead of loading views for compatibility with MY_Controller libraries
+				}
+			}
+			else
+			{
+				//if the login was un-successful
+				//redirect them back to the login page
+				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				redirect('auth/login', 'refresh'); //use redirects instead of loading views for compatibility with MY_Controller libraries
+			}
+		}
+		else
+		{
+			$this->form_validation->set_rules('token'			, 'Token'		, 'required');
+			$this->form_validation->set_rules('remember'		, 'Remember Me'	, 'required');
+			$this->form_validation->set_rules('identity'		, 'Identity'	, 'required');
+			$this->form_validation->set_rules('gauth_login_key'	, 'Login key'	, 'required');
+			
+			//the user is not logging in so display the login page
+			//set the flash data error message if there is one
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$this->data['token'] = array('name' => 'token',
+				'id' => 'token',
+				'type' => 'text'
+			);
+			$this->data['identity'] = array('name' => 'identity',
+				'id' => 'identity',
+				'type' => 'hidden',
+				'value' => $this->session->flashdata('identity')
+			);
+			$this->data['remember'] = array('name' => 'remember',
+				'id' => 'remember',
+				'type' => 'hidden',
+				'value' => $this->session->flashdata('remember')
+			);
+			$this->data['gauth_login_key'] = array('name' => 'gauth_login_key',
+				'id' => 'gauth_login_key',
+				'type' => 'hidden',
+				'value' => $this->session->flashdata('gauth_login_key')
+			);
+
+			$this->_render_page('auth/login_gauth', $this->data);
 		}
 	}
 
