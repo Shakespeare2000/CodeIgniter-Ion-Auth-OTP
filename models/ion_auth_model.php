@@ -994,7 +994,7 @@ class Ion_auth_model extends CI_Model
 					return FALSE;
 				}
 
-				//Check database if multi-factor auth is set and avoid updating database settings
+				//Check database if multi-factor auth is enabled and if user has it enabled
 				if ($user->gauth === NULL || !$this->gauth['enabled'])
 				{
 					$this->set_session($user);
@@ -1037,7 +1037,7 @@ class Ion_auth_model extends CI_Model
 	public function gauth_login($identity, $token, $remember=FALSE, $secret_key){
 		$this->trigger_events('pre_login');
 		
-		if (empty($identity) || empty($token) ||empty($secret_key))
+		if (empty($identity) || empty($token) || empty($secret_key))
 		{
 			$this->set_error('gauth_login_unsuccessful');
 			return FALSE;
@@ -1055,7 +1055,7 @@ class Ion_auth_model extends CI_Model
 			$user = $query->row();
 			if($this->is_gauth_secret_key_valid($user->gauth_login_code, $secret_key))
 			{
-				if ($this->is_gauth_token_valid($user->gauth, $token) === TRUE)
+				if ($this->is_gauth_token_valid($user->gauth, $token))
 				{
 					$this->set_session($user);
 
@@ -1072,12 +1072,25 @@ class Ion_auth_model extends CI_Model
 					$this->set_message('login_successful');
 					return TRUE;
 				}
-				// Add a function to check the recovery codes and if so, remove the used recovery code from database
+				else if($this->is_recovery_code_valid($user->id, $token, TRUE))
+				{
+					$this->set_session($user);
+
+					$this->update_last_login($user->id);
+
+					$this->clear_login_attempts($identity);
+
+					if ($remember && $this->config->item('remember_users', 'ion_auth'))
+					{
+						$this->remember_user($user->id);
+					}
+
+					$this->trigger_events(array('post_login', 'post_login_successful'));
+					$this->set_message('login_successful');
+					return TRUE;
+				}
 			}
 		}
-		//Hash something anyway, just to take up time
-		$this->hash_password($token);
-
 		$this->trigger_events('post_login_unsuccessful');
 		$this->set_error('gauth_login_unsuccessful');
 
@@ -1092,7 +1105,7 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function is_gauth_token_valid($stored_key, $user_token){
 		if ($this->gauth['enabled']) {
-			if (empty($stored_code) && empty($user_token))
+			if (empty($stored_code) || empty($user_token))
 			{
 				return FALSE;
 			}
@@ -1112,7 +1125,7 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function is_gauth_secret_key_valid($stored_code, $user_code){
 		if ($this->gauth['enabled']) {
-			if (empty($stored_code) && empty($user_code))
+			if (empty($stored_code) || empty($user_code))
 			{
 				return FALSE;
 			}
@@ -1144,6 +1157,90 @@ class Ion_auth_model extends CI_Model
 				{
 					return TRUE;
 				}
+			}
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Checks database for recovery codes and deletes if true
+	 *
+	 * @return boolean
+	 * @author SpyTec
+	 **/
+	public function is_recovery_code_valid($id, $recovery_code, $delete_recovery_code = FALSE){
+		if ($this->gauth['enabled']) {
+			if (empty($id) || empty($recovery_code))
+			{
+				return FALSE;
+			}
+			
+			$this->db->select('gauth_recovery_codes');
+			$this->db->where("id", $id);
+			$query = $this->db->get($this->tables['users']);
+
+			if ($query->num_rows() === 1)
+			{
+				$user = $query->row();
+				if($user->gauth_recovery_codes !== NULL)
+				{
+					$gauth_recovery_codes = unserialize($user->gauth_recovery_codes);
+					$amount = count($gauth_recovery_codes);
+					foreach ($gauth_recovery_codes as $gauth_recovery_code) {
+						if ($gauth_recovery_code === $recovery_code) {
+							if($delete_recovery_code)
+							{
+								$this->delete_recovery_code($id, $gauth_recovery_codes, $recovery_code);
+							}
+							return TRUE;
+						}
+					}
+				}
+			}
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Remove recovery code from recovery code array
+	 *
+	 * @return boolean
+	 * @author SpyTec
+	 **/
+	public function delete_recovery_code($id, $current_recovery_codes = array(), $recovery_code){
+		if ($this->gauth['enabled']) {
+			if (empty($id) || empty($current_recovery_codes) || empty($recovery_code))
+			{
+				return FALSE;
+			}
+			#$current_recovery_codes = unserialize($current_recovery_codes)
+			foreach ($current_recovery_codes as $current_recovery_code) {
+				if($current_recovery_code === $recovery_code)
+				{
+					unset($current_recovery_codes[$current_recovery_code]);
+				}
+			}
+
+			if(($key = array_search($recovery_code, $current_recovery_codes)) !== FALSE) {
+			    unset($current_recovery_codes[$key]);
+			}
+			if(empty($current_recovery_codes))
+			{
+				$current_recovery_codes = NULL;
+			}
+			else
+			{
+				$current_recovery_codes = serialize($current_recovery_codes);
+			}
+
+			$this->db->select('gauth_recovery_codes');
+			$this->db->where("id", $id);
+			$data = array(
+				"gauth_recovery_codes" => $current_recovery_codes
+				);
+			if($this->db->update($this->tables['users'], $data))
+			{
+				return TRUE;
 			}
 		}
 		return FALSE;

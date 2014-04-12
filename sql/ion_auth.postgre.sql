@@ -5,6 +5,7 @@ CREATE TABLE "users" (
     "password" varchar(255) NOT NULL,
     "gauth" varchar(255),
     "gauth_login_code" varchar(40),
+    "gauth_recovery_codes" text,
     "salt" varchar(40),
     "email" varchar(100) NOT NULL,
     "activation_code" varchar(40),
@@ -49,8 +50,8 @@ INSERT INTO groups (id, name, description) VALUES
     (1,'admin','Administrator'),
     (2,'members','General User');
 
-INSERT INTO users (ip_address, username, password, gath, gauth_login_code, salt, email, activation_code, forgotten_password_code, created_on, last_login, active, first_name, last_name, company, phone) VALUES
-    ('127.0.0.1','administrator','$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36',NULL,NULL,'','admin@admin.com','',NULL,'1268889823','1268889823','1','Admin','istrator','ADMIN','0');
+INSERT INTO users (ip_address, username, password, gath, salt, email, activation_code, forgotten_password_code, created_on, last_login, active, first_name, last_name, company, phone) VALUES
+    ('127.0.0.1','administrator','$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36',NULL,NULL,NULL,'','admin@admin.com','',NULL,'1268889823','1268889823','1','Admin','istrator','ADMIN','0');
 
 INSERT INTO users_groups (user_id, group_id) VALUES
     (1,1),
