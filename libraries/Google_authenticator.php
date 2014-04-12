@@ -47,7 +47,7 @@ class Google_authenticator
      * @param int $secretLength
      * @return string
      */
-    public function create_secret($secretLength = 16)
+    public function create_secret($secretLength)
     {
         $secretLength = $this->gauth['secret_length'];
         $validChars = $this->_getBase32LookupTable();
@@ -70,14 +70,7 @@ class Google_authenticator
     public function get_code($secret, $timeSlice = null)
     {
         if ($timeSlice === null) {
-            if($this->gauth['time_fix'])
-            {
-                $timeSlice = floor(time()-30 / 30);
-            }
-            else
-            {
-                $timeSlice = floor(time() / 30);
-            }
+            $timeSlice = floor(time() / $this->gauth['interval']);
         }
 
         $secretkey = $this->_base32Decode($secret);
@@ -131,14 +124,7 @@ class Google_authenticator
      */
     public function verify_code($secret, $code, $discrepancy = 1)
     {
-        if($this->gauth['time_fix'])
-        {
-            $currentTimeSlice = floor(time()-30 / 30);
-        }
-        else
-        {
-            $currentTimeSlice = floor(time() / 30);
-        }
+        $currentTimeSlice = floor(time() / 30);
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = $this->get_code($secret, $currentTimeSlice + $i);
