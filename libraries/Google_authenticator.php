@@ -124,7 +124,7 @@ class Google_authenticator
      */
     public function verify_code($secret, $code, $discrepancy = 1)
     {
-        $currentTimeSlice = floor(time() / 30);
+        $currentTimeSlice = floor(time() / $this->gauth['interval']);
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = $this->get_code($secret, $currentTimeSlice + $i);
