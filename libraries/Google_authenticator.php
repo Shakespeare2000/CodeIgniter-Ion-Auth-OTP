@@ -70,7 +70,7 @@ class Google_authenticator
     public function get_code($secret, $timeSlice = null)
     {
         if ($timeSlice === null) {
-            $timeSlice = floor(time() / $this->gauth['interval']);
+            $timeSlice = floor(time() / 30);
         }
 
         $secretkey = $this->_base32Decode($secret);
@@ -125,7 +125,7 @@ class Google_authenticator
     public function verify_code($secret, $code, $discrepancy = 2)
     {
         $discrepancy = $this->gauth['discrepancy'];
-        $currentTimeSlice = floor(time() / $this->gauth['interval']);
+        $currentTimeSlice = floor(time() / 30);
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = $this->get_code($secret, $currentTimeSlice + $i);
