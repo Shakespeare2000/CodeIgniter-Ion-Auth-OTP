@@ -70,7 +70,6 @@ class Auth extends CI_Controller {
 			{
 				if ($this->ion_auth->is_gauth_set($this->input->post('identity')))
 				{
-					// ****** Get secret key from database ********
 					$activation_code = $this->ion_auth->set_gauth_login_activation($this->input->post('identity'));
 					if($activation_code)
 					{
@@ -159,10 +158,6 @@ class Auth extends CI_Controller {
 		}
 		else
 		{
-			$this->form_validation->set_rules('token'			, 'Token'		, 'required');
-			$this->form_validation->set_rules('remember'		, 'Remember Me'	, 'required');
-			$this->form_validation->set_rules('identity'		, 'Identity'	, 'required');
-			$this->form_validation->set_rules('gauth_login_key'	, 'Login key'	, 'required');
 			
 			//the user is not logging in so display the login page
 			//set the flash data error message if there is one
