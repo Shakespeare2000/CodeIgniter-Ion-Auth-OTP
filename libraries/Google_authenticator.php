@@ -111,7 +111,7 @@ class Google_authenticator
             $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
         }
 
-        return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.$urlencoded.'';
+        return 'https://chart.googleapis.com/chart?chs='.$this->gauth['qr_size'].'x'.$this->gauth['qr_size'].'&chld=M|0&cht=qr&chl='.$urlencoded.'';
     }
 
     /**
@@ -130,11 +130,11 @@ class Google_authenticator
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = $this->get_code($secret, $currentTimeSlice + $i);
             if ($calculatedCode == $code ) {
-                return true;
+                return TRUE;
             }
         }
 
-        return false;
+        return FALSE;
     }
 
     /**

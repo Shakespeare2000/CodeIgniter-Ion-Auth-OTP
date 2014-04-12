@@ -111,6 +111,7 @@ $config['gauth']['enabled']			= TRUE;			// If you want to use multi-step authent
 $config['gauth']['secret_length']	= 16; 			// Length of secret key shared between you and client
 $config['gauth']['issuer'] 			= "Ion_auth"; 	// Provider shown on Google Authenticator mobile app
 $config['gauth']['discrepancy']		= 2; 			// This is the allowed time drift in interval units (8 means 4 minutes before or after if interval is 30s)
+$config['gauth']['qr_size']			= 200; 			// This is the generated size in pixels for the Google generated QR code
 
 
 
