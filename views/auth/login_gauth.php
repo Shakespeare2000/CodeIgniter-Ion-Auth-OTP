@@ -11,15 +11,15 @@
   </p>
 
   <p>
-    <?php echo form_input($identity);?>
+    <?php echo form_hidden($identity);?>
   </p>
 
   <p>
-    <?php echo form_input($remember);?>
+    <?php echo form_hidden($remember);?>
   </p>
 
   <p>
-    <?php echo form_input($gauth_login_key);?>
+    <?php echo form_hidden($gauth_login_key);?>
   </p>
 
   <p><?php echo form_submit('submit', lang('login_submit_btn'));?></p>

@@ -123,9 +123,9 @@ class Auth extends CI_Controller {
 
 		//validate form input
 		$this->form_validation->set_rules('token'			, 'Token'		, 'required');
-		$this->form_validation->set_rules('remember'		, 'Remember Me'	, '');
 		$this->form_validation->set_rules('identity'		, 'Identity'	, 'required');
 		$this->form_validation->set_rules('gauth_login_key'	, 'Login key'	, 'required');
+		$this->form_validation->set_rules('remember'		, 'Remember Me');
 
 		if ($this->form_validation->run() == true)
 		{
@@ -167,20 +167,14 @@ class Auth extends CI_Controller {
 				'id' => 'token',
 				'type' => 'text'
 			);
-			$this->data['identity'] = array('name' => 'identity',
-				'id' => 'identity',
-				'type' => 'hidden',
-				'value' => $this->session->flashdata('identity')
+			$this->data['identity'] = array(
+				'identity' => $this->session->flashdata('identity')
 			);
-			$this->data['remember'] = array('name' => 'remember',
-				'id' => 'remember',
-				'type' => 'hidden',
-				'value' => $this->session->flashdata('remember')
+			$this->data['remember'] = array(
+				'remember' => $this->session->flashdata('remember')
 			);
-			$this->data['gauth_login_key'] = array('name' => 'gauth_login_key',
-				'id' => 'gauth_login_key',
-				'type' => 'hidden',
-				'value' => $this->session->flashdata('gauth_login_key')
+			$this->data['gauth_login_key'] = array(
+				'gauth_login_key' => $this->session->flashdata('gauth_login_key')
 			);
 
 			$this->_render_page('auth/login_gauth', $this->data);
