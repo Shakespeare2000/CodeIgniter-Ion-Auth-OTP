@@ -22,6 +22,7 @@ class Google_authenticator
     {
         $this->load->config('ion_auth', TRUE);
         $this->gauth = $this->config->item('gauth', 'ion_auth');
+        $_codeLength = $this->gauth['code_length'];
     }
 
     /**
