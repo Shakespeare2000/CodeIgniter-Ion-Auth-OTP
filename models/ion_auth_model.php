@@ -995,7 +995,7 @@ class Ion_auth_model extends CI_Model
 				}
 
 				//Check database if multi-factor auth is set and avoid updating database settings
-				if ($user->gauth === NULL)
+				if ($user->gauth === NULL || !$this->gauth['enabled'])
 				{
 					$this->set_session($user);
 
@@ -1072,6 +1072,7 @@ class Ion_auth_model extends CI_Model
 					$this->set_message('login_successful');
 					return TRUE;
 				}
+				// Add a function to check the recovery codes and if so, remove the used recovery code from database
 			}
 		}
 		//Hash something anyway, just to take up time
