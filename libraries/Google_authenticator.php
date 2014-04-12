@@ -47,7 +47,7 @@ class Google_authenticator
      * @param int $secretLength
      * @return string
      */
-    public function create_secret($secretLength)
+    public function create_secret($secretLength = 16)
     {
         $secretLength = $this->gauth['secret_length'];
         $validChars = $this->_getBase32LookupTable();
@@ -122,8 +122,9 @@ class Google_authenticator
      * @param int $discrepancy This is the allowed time drift in 30 second units (8 means 4 minutes before or after)
      * @return bool
      */
-    public function verify_code($secret, $code, $discrepancy = 1)
+    public function verify_code($secret, $code, $discrepancy = 2)
     {
+        $discrepancy = $this->gauth['discrepancy'];
         $currentTimeSlice = floor(time() / $this->gauth['interval']);
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {

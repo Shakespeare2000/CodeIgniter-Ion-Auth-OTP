@@ -110,8 +110,8 @@ $config['forgot_password_expiration'] = 0;                   // The number of mi
 $config['gauth']['enabled']			= TRUE;			// If you want to use multi-step authentication
 $config['gauth']['interval']		= 30; 			// The number of seconds between each token. Standard is 30s
 $config['gauth']['secret_length']	= 16; 			// Length of secret key shared between you and client
-$config['gauth']['time_fix'] 		= FALSE; 		// Sometimes gauth generates one token too fast. If so, set to TRUE
 $config['gauth']['issuer'] 			= "Ion_auth"; 	// Provider shown on Google Authenticator mobile app
+$config['gauth']['discrepancy']		= 2; 			// This is the allowed time drift in interval units (8 means 4 minutes before or after if interval is 30s)
 
 
 
