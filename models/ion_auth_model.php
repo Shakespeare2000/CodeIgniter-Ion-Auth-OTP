@@ -1036,7 +1036,7 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function gauth_login($identity, $token, $remember=FALSE, $secret_key){
 		$this->trigger_events('pre_login');
-
+		
 		if (empty($identity) || empty($token) ||empty($secret_key))
 		{
 			$this->set_error('gauth_login_unsuccessful');
@@ -1055,9 +1055,7 @@ class Ion_auth_model extends CI_Model
 			$user = $query->row();
 			if($this->is_gauth_secret_key_valid($user->gauth_login_code, $secret_key))
 			{
-				$token = $this->is_gauth_token_valid($user->gauth, $token);
-
-				if ($token === TRUE)
+				if ($this->is_gauth_token_valid($user->gauth, $token) === TRUE)
 				{
 					$this->set_session($user);
 
@@ -1072,11 +1070,10 @@ class Ion_auth_model extends CI_Model
 
 					$this->trigger_events(array('post_login', 'post_login_successful'));
 					$this->set_message('login_successful');
-
+					return TRUE;
 				}
 			}
 		}
-
 		//Hash something anyway, just to take up time
 		$this->hash_password($token);
 
