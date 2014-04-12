@@ -41,7 +41,7 @@ $lang['login_unsuccessful_not_active'] 		 = 'Account is inactive';
 $lang['login_timeout']                       = 'Temporarily Locked Out.  Try again later.';
 $lang['logout_successful'] 		 	         = 'Logged Out Successfully';
 
-// Google Authenticator
+// Google Authenticator login 
 $lang['gauth_login_unsuccessful']			= 'Incorrect token';
 $lang['gauth_activation_key_unsuccessful']	= 'Unable to set activation key';
 
