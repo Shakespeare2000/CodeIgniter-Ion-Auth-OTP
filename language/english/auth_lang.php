@@ -30,9 +30,9 @@ $lang['login_submit_btn']      = 'Login';
 $lang['login_forgot_password'] = 'Forgot your password?';
 
 // Google Authenticator login
-$lang['gauth_login_heading'] 	 = 'One Time Password';
-$lang['gauth_login_subheading']  = 'Please enter one time password token below.';
-$lang['gauth_login_token_label'] = 'One Time Password:';
+$lang['otp_login_heading'] 	 = 'One Time Password';
+$lang['otp_login_subheading']  = 'Please enter one time password token or recovery key below.';
+$lang['otp_login_token_label'] = 'One Time Password:';
 
 // Index
 $lang['index_heading']           = 'Users';
@@ -67,7 +67,7 @@ $lang['create_user_email_label']                       = 'Email:';
 $lang['create_user_phone_label']                       = 'Phone:';
 $lang['create_user_password_label']                    = 'Password:';
 $lang['create_user_password_confirm_label']            = 'Confirm Password:';
-$lang['create_user_gauth_label']			           = 'One Time Password Key:';
+$lang['create_user_otp_label']			           = 'One Time Password Key:';
 $lang['create_user_submit_btn']                        = 'Create User';
 $lang['create_user_validation_fname_label']            = 'First Name';
 $lang['create_user_validation_lname_label']            = 'Last Name';
@@ -78,7 +78,7 @@ $lang['create_user_validation_phone3_label']           = 'Third Part of Phone';
 $lang['create_user_validation_company_label']          = 'Company Name';
 $lang['create_user_validation_password_label']         = 'Password';
 $lang['create_user_validation_password_confirm_label'] = 'Password Confirmation';
-$lang['create_user_validation_gauth_label'] 		   = 'One Time Password Key';
+$lang['create_user_validation_otp_label'] 		   = 'One Time Password Key';
 
 // Edit User
 $lang['edit_user_heading']                           = 'Edit User';
@@ -90,7 +90,7 @@ $lang['edit_user_email_label']                       = 'Email:';
 $lang['edit_user_phone_label']                       = 'Phone:';
 $lang['edit_user_password_label']                    = 'Password: (if changing password)';
 $lang['edit_user_password_confirm_label']            = 'Confirm Password: (if changing password)';
-$lang['edit_user_gauth_label']            			 = 'One Time Password Key: (if changing OTP)';
+$lang['edit_user_otp_label']            			 = 'One Time Password Key: (if changing otp)';
 $lang['edit_user_groups_heading']                    = 'Member of groups';
 $lang['edit_user_submit_btn']                        = 'Save User';
 $lang['edit_user_validation_fname_label']            = 'First Name';
@@ -103,7 +103,7 @@ $lang['edit_user_validation_company_label']          = 'Company Name';
 $lang['edit_user_validation_groups_label']           = 'Groups';
 $lang['edit_user_validation_password_label']         = 'Password';
 $lang['edit_user_validation_password_confirm_label'] = 'Password Confirmation';
-$lang['edit_user_validation_gauth_label'] 			 = 'One Time Password Key';
+$lang['edit_user_validation_otp_label'] 			 = 'One Time Password Key';
 
 // Create Group
 $lang['create_group_title']                  = 'Create Group';

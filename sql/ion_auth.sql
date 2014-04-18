@@ -32,9 +32,9 @@ CREATE TABLE `users` (
   `ip_address` varchar(15) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `gauth` varchar(255) DEFAULT NULL,
-  `gauth_login_code` varchar(40) DEFAULT NULL,
-  `gauth_recovery_codes` text DEFAULT NULL,
+  `otp` varchar(255) DEFAULT NULL,
+  `otp_login_code` varchar(40) DEFAULT NULL,
+  `otp_recovery_codes` text DEFAULT NULL,
   `salt` varchar(40) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `activation_code` varchar(40) DEFAULT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `users` (
 # Dumping data for table 'users'
 #
 
-INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `gauth`, `gauth_login_code`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
+INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `otp`, `otp_login_code`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
      ('1','127.0.0.1','administrator','$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36',NULL,NULL,NULL,'','admin@admin.com','',NULL,'1268889823','1268889823','1', 'Admin','istrator','ADMIN','0');
 
 

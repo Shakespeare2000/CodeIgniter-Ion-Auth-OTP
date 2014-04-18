@@ -184,7 +184,7 @@ class Ion_auth_model extends CI_Model
 		$this->store_salt      = $this->config->item('store_salt', 'ion_auth');
 		$this->salt_length     = $this->config->item('salt_length', 'ion_auth');
 		$this->join			   = $this->config->item('join', 'ion_auth');
-		$this->gauth		   = $this->config->item('gauth', 'ion_auth');
+		$this->otp		   = $this->config->item('otp', 'ion_auth');
 
 
 		//initialize hash method options (Bcrypt)
@@ -688,16 +688,16 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * Insert a gauth login activation key.
+	 * Insert a otp login activation key.
 	 *
 	 * @return boolean
 	 * @author Mathew, Ryan and SpyTec 
 	 **/
-	public function set_gauth_login_activation($identity)
+	public function set_otp_login_activation($identity)
 	{
 		if (empty($identity))
 		{
-			//Change to gauth_login_activation please!
+			//Change to otp_login_activation please!
 			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
 			return FALSE;
 		}
@@ -719,13 +719,13 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('extra_where');
 
 		//Possibly add an expire?
-		$update['gauth_login_code'] = $key;
+		$update['otp_login_code'] = $key;
 
 		$this->db->update($this->tables['users'], $update, array($this->identity_column => $identity));
 
 		$return = $this->db->affected_rows() == 1;
 
-		//Change to gauth_login_activation please!
+		//Change to otp_login_activation please!
 		/*if ($return)
 			$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_successful'));
 		else
@@ -735,27 +735,27 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * Insert a gauth login activation key.
+	 * Insert a otp login activation key.
 	 *
 	 * @return boolean
 	 * @author Mathew, Ryan and SpyTec 
 	 **/
-	public function get_gauth_login_activation($identity)
+	public function get_otp_login_activation($identity)
 	{
 		if (empty($identity))
 		{
-			//Change to gauth_login_activation please!
+			//Change to otp_login_activation please!
 			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
 			return FALSE;
 		}
 
 		$this->db->where($this->identity_column, $identity);
-		$this->db->select('gauth_login_code');
+		$this->db->select('otp_login_code');
 		$query = $this->db->get('users');
 
 		$return = $query->row();
 
-		return $return->gauth_login_code;
+		return $return->otp_login_code;
 	}
 
 	/**
@@ -962,7 +962,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', username, email, id, password, gauth, active, last_login')
+		$query = $this->db->select($this->identity_column . ', username, email, id, password, otp, active, last_login')
 		                  ->where($this->identity_column, $this->db->escape_str($identity))
 		                  ->limit(1)
 		                  ->get($this->tables['users']);
@@ -995,7 +995,7 @@ class Ion_auth_model extends CI_Model
 				}
 
 				//Check database if multi-factor auth is enabled and if user has it enabled
-				if ($user->gauth === NULL || !$this->gauth['enabled'])
+				if ($user->otp === NULL || !$this->otp['enabled'])
 				{
 					$this->set_session($user);
 
@@ -1034,18 +1034,18 @@ class Ion_auth_model extends CI_Model
 	 * @return boolean
 	 * @author Mathew and SpyTec
 	 **/
-	public function gauth_login($identity, $token, $remember=FALSE, $secret_key){
+	public function otp_login($identity, $token, $remember=FALSE, $secret_key){
 		$this->trigger_events('pre_login');
 		
 		if (empty($identity) || empty($token) || empty($secret_key))
 		{
-			$this->set_error('gauth_login_unsuccessful');
+			$this->set_error('otp_login_unsuccessful');
 			return FALSE;
 		}
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', username, email, id, gauth, gauth_login_code, last_login')
+		$query = $this->db->select($this->identity_column . ', username, email, id, otp, otp_login_code, last_login')
 		                  ->where($this->identity_column, $this->db->escape_str($identity))
 		                  ->limit(1)
 		                  ->get($this->tables['users']);
@@ -1053,9 +1053,9 @@ class Ion_auth_model extends CI_Model
 		if ($query->num_rows() === 1)
 		{
 			$user = $query->row();
-			if($this->is_gauth_secret_key_valid($user->gauth_login_code, $secret_key))
+			if($this->is_otp_secret_key_valid($user->otp_login_code, $secret_key))
 			{
-				if ($this->is_gauth_token_valid($user->gauth, $token))
+				if ($this->is_otp_token_valid($user->otp, $token))
 				{
 					$this->set_session($user);
 
@@ -1092,7 +1092,7 @@ class Ion_auth_model extends CI_Model
 			}
 		}
 		$this->trigger_events('post_login_unsuccessful');
-		$this->set_error('gauth_login_unsuccessful');
+		$this->set_error('otp_login_unsuccessful');
 
 		return FALSE;
 	}
@@ -1103,8 +1103,8 @@ class Ion_auth_model extends CI_Model
 	 * @return boolean
 	 * @author Mathew and SpyTec
 	 **/
-	public function is_gauth_token_valid($stored_code, $user_token){
-		if ($this->gauth['enabled']) {
+	public function is_otp_token_valid($stored_code, $user_token){
+		if ($this->otp['enabled']) {
 			if (empty($stored_code) || empty($user_token))
 			{
 				return FALSE;
@@ -1123,8 +1123,8 @@ class Ion_auth_model extends CI_Model
 	 * @return boolean
 	 * @author Mathew and SpyTec
 	 **/
-	public function is_gauth_secret_key_valid($stored_code, $user_code){
-		if ($this->gauth['enabled']) {
+	public function is_otp_secret_key_valid($stored_code, $user_code){
+		if ($this->otp['enabled']) {
 			if (empty($stored_code) || empty($user_code))
 			{
 				return FALSE;
@@ -1143,17 +1143,17 @@ class Ion_auth_model extends CI_Model
 	 * @return boolean
 	 * @author SpyTec
 	 **/
-	public function is_gauth_set($identity){
-		if ($this->gauth['enabled']) {
+	public function is_otp_set($identity){
+		if ($this->otp['enabled']) {
 			
-			$this->db->select('gauth');
+			$this->db->select('otp');
 			$this->db->where($this->identity_column , $this->db->escape_str($identity));
 			$query = $this->db->get($this->tables['users']);
 
 			if ($query->num_rows() === 1)
 			{
 				$user = $query->row();
-				if($user->gauth !== NULL)
+				if($user->otp !== NULL)
 				{
 					return TRUE;
 				}
@@ -1169,28 +1169,28 @@ class Ion_auth_model extends CI_Model
 	 * @author SpyTec
 	 **/
 	public function is_recovery_code_valid($id, $recovery_code, $delete_recovery_code = FALSE){
-		if ($this->gauth['enabled']) {
+		if ($this->otp['enabled']) {
 			if (empty($id) || empty($recovery_code))
 			{
 				return FALSE;
 			}
 			
-			$this->db->select('gauth_recovery_codes');
+			$this->db->select('otp_recovery_codes');
 			$this->db->where("id", $id);
 			$query = $this->db->get($this->tables['users']);
 
 			if ($query->num_rows() === 1)
 			{
 				$user = $query->row();
-				if($user->gauth_recovery_codes !== NULL)
+				if($user->otp_recovery_codes !== NULL)
 				{
-					$gauth_recovery_codes = unserialize($user->gauth_recovery_codes);
-					$amount = count($gauth_recovery_codes);
-					foreach ($gauth_recovery_codes as $gauth_recovery_code) {
-						if ($gauth_recovery_code === $recovery_code) {
+					$otp_recovery_codes = unserialize($user->otp_recovery_codes);
+					$amount = count($otp_recovery_codes);
+					foreach ($otp_recovery_codes as $otp_recovery_code) {
+						if ($otp_recovery_code === $recovery_code) {
 							if($delete_recovery_code)
 							{
-								$this->delete_recovery_code($id, $gauth_recovery_codes, $recovery_code);
+								$this->delete_recovery_code($id, $otp_recovery_codes, $recovery_code);
 							}
 							return TRUE;
 						}
@@ -1208,7 +1208,7 @@ class Ion_auth_model extends CI_Model
 	 * @author SpyTec
 	 **/
 	public function delete_recovery_code($id, $current_recovery_codes = array(), $recovery_code){
-		if ($this->gauth['enabled']) {
+		if ($this->otp['enabled']) {
 			if (empty($id) || empty($current_recovery_codes) || empty($recovery_code))
 			{
 				return FALSE;
@@ -1233,10 +1233,10 @@ class Ion_auth_model extends CI_Model
 				$current_recovery_codes = serialize($current_recovery_codes);
 			}
 
-			$this->db->select('gauth_recovery_codes');
+			$this->db->select('otp_recovery_codes');
 			$this->db->where("id", $id);
 			$data = array(
-				"gauth_recovery_codes" => $current_recovery_codes
+				"otp_recovery_codes" => $current_recovery_codes
 				);
 			if($this->db->update($this->tables['users'], $data))
 			{

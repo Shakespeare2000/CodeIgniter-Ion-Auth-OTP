@@ -140,26 +140,26 @@ class Ion_auth
 	 * @return void
 	 * @author Mathew and SpyTec
 	 **/
-	public function set_gauth_login_activation($identity)
+	public function set_otp_login_activation($identity)
 	{
-		if ( $this->ion_auth_model->set_gauth_login_activation($identity) )
+		if ( $this->ion_auth_model->set_otp_login_activation($identity) )
 		{
 			// Get user information
             $user = $this->where($this->config->item('identity', 'ion_auth'), $identity)->where('active', 1)->users()->row();  //changed to get_user_by_identity from email
 
 			if ($user)
 			{
-				return $this->ion_auth_model->get_gauth_login_activation($identity);
+				return $this->ion_auth_model->get_otp_login_activation($identity);
 			}
 			else
 			{
-				$this->set_error('gauth_activation_key_unsuccessful');
+				$this->set_error('otp_activation_key_unsuccessful');
 				return FALSE;
 			}
 		}
 		else
 		{
-			$this->set_error('gauth_activation_key_unsuccessful');
+			$this->set_error('otp_activation_key_unsuccessful');
 			return FALSE;
 		}
 	}

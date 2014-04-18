@@ -42,8 +42,8 @@ $lang['login_timeout']                       = 'Temporarily Locked Out.  Try aga
 $lang['logout_successful'] 		 	         = 'Logged Out Successfully';
 
 // Google Authenticator login 
-$lang['gauth_login_unsuccessful']			= 'Incorrect token';
-$lang['gauth_activation_key_unsuccessful']	= 'Unable to set activation key';
+$lang['otp_login_unsuccessful']				= 'Incorrect token';
+$lang['otp_activation_key_unsuccessful']	= 'Unable to set activation key';
 
 // Account Changes
 $lang['update_successful'] 		 	         = 'Account Information Successfully Updated';

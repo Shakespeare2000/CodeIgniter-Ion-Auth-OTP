@@ -14,15 +14,15 @@
 
 class Google_authenticator
 {
-    var $gauth;
+    var $otp;
     
     protected $_codeLength = 6;
 
     public function __construct()
     {
         $this->load->config('ion_auth', TRUE);
-        $this->gauth = $this->config->item('gauth', 'ion_auth');
-        $_codeLength = $this->gauth['code_length'];
+        $this->otp = $this->config->item('otp', 'ion_auth');
+        $_codeLength = $this->otp['code_length'];
     }
 
     /**
@@ -50,7 +50,7 @@ class Google_authenticator
      */
     public function create_secret($secretLength = 16)
     {
-        $secretLength = $this->gauth['secret_length'];
+        $secretLength = $this->otp['secret_length'];
         $validChars = $this->_getBase32LookupTable();
         unset($validChars[32]);
 
@@ -105,14 +105,14 @@ class Google_authenticator
     public function get_qrcode_googleurl($name, $secret, $issuer = FALSE) {
         if(!$issuer)
         {
-            $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$this->gauth['issuer'].'');
+            $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$this->otp['issuer'].'');
         }
         else
         {
             $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
         }
 
-        return 'https://chart.googleapis.com/chart?chs='.$this->gauth['qr_size'].'x'.$this->gauth['qr_size'].'&chld=M|0&cht=qr&chl='.$urlencoded.'';
+        return 'https://chart.googleapis.com/chart?chs='.$this->otp['qr_size'].'x'.$this->otp['qr_size'].'&chld=M|0&cht=qr&chl='.$urlencoded.'';
     }
 
     /**
@@ -125,7 +125,7 @@ class Google_authenticator
      */
     public function verify_code($secret, $code, $discrepancy = 2)
     {
-        $discrepancy = $this->gauth['discrepancy'];
+        $discrepancy = $this->otp['discrepancy'];
         $currentTimeSlice = floor(time() / 30);
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {

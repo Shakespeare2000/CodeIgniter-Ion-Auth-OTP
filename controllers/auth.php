@@ -68,15 +68,15 @@ class Auth extends CI_Controller {
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
 			{
-				if ($this->ion_auth->is_gauth_set($this->input->post('identity')))
+				if ($this->ion_auth->is_otp_set($this->input->post('identity')))
 				{
-					$activation_code = $this->ion_auth->set_gauth_login_activation($this->input->post('identity'));
+					$activation_code = $this->ion_auth->set_otp_login_activation($this->input->post('identity'));
 					if($activation_code)
 					{
-						$this->session->set_flashdata('gauth_login_key', $activation_code);
+						$this->session->set_flashdata('otp_login_key', $activation_code);
 						$this->session->set_flashdata('identity', $this->input->post('identity'));
 						$this->session->set_flashdata('remember_me', $remember);
-						redirect('auth/login_gauth', 'refresh'); //use redirects instead of loading views for compatibility with MY_Controller libraries
+						redirect('auth/login_otp', 'refresh'); //use redirects instead of loading views for compatibility with MY_Controller libraries
 					}
 					//if the set activation was un-successful
 					//redirect them back to the login page
@@ -117,23 +117,23 @@ class Auth extends CI_Controller {
 	}
 
 	//login with two-step authentication
-	function login_gauth()
+	function login_otp()
 	{
 		$this->data['title'] = "Login";
 
 		//validate form input
 		$this->form_validation->set_rules('token'			, 'Token'		, 'required');
 		$this->form_validation->set_rules('identity'		, 'Identity'	, 'required');
-		$this->form_validation->set_rules('gauth_login_key'	, 'Login key'	, 'required');
+		$this->form_validation->set_rules('otp_login_key'	, 'Login key'	, 'required');
 		$this->form_validation->set_rules('remember'		, 'Remember Me');
 
 		if ($this->form_validation->run() == true)
 		{
 			$remember = (bool) $this->input->post('remember');
 
-			if ($this->ion_auth->is_gauth_set($this->input->post('identity')))
+			if ($this->ion_auth->is_otp_set($this->input->post('identity')))
 			{
-				if ($this->ion_auth->gauth_login($this->input->post('identity'), $this->input->post('token'), $remember, $this->input->post('gauth_login_key')))
+				if ($this->ion_auth->otp_login($this->input->post('identity'), $this->input->post('token'), $remember, $this->input->post('otp_login_key')))
 				{
 					//if the login is successful
 					//redirect them back to the home page
@@ -173,11 +173,11 @@ class Auth extends CI_Controller {
 			$this->data['remember'] = array(
 				'remember' => $this->session->flashdata('remember')
 			);
-			$this->data['gauth_login_key'] = array(
-				'gauth_login_key' => $this->session->flashdata('gauth_login_key')
+			$this->data['otp_login_key'] = array(
+				'otp_login_key' => $this->session->flashdata('otp_login_key')
 			);
 
-			$this->_render_page('auth/login_gauth', $this->data);
+			$this->_render_page('auth/login_otp', $this->data);
 		}
 	}
 
