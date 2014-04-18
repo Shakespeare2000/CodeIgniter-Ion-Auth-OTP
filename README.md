@@ -11,7 +11,7 @@ awesome then you could expect.
 
 This branch includes multi-factor authentication with (T)OTP. This works 
 with Google Authenticator and Authy on both Android and iOS. Should work
-with any other app that follows [RFC-6238](http://tools.ietf.org/html/rfc6238)
+with any other app that follows [RFC-6238](http://tools.ietf.org/html/rfc6238).
 
 ##Documentation
 Documentation is located at http://benedmunds.com/ion_auth/
