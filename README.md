@@ -9,6 +9,10 @@ the code and added new features.
 This version drops any backwards compatibility and makes things even more 
 awesome then you could expect.
 
+This branch includes multi-factor authentication with (T)OTP. This works 
+with Google Authenticator and Authy on both Android and iOS. Should work
+with any other app that follows [RFC-6238](http://tools.ietf.org/html/rfc6238)
+
 ##Documentation
 Documentation is located at http://benedmunds.com/ion_auth/
 
@@ -23,6 +27,9 @@ get the migrations from JD here:
 https://github.com/iamfiscus/codeigniter-ion-auth-migration).  
 
 ###MongoDB Setup
+Should be noted that MongoDB is not yet configured for OTP.
+If you want to port it to MongoDB, send a PR.
+
 Integrate the following projects to enable MongoDB support in CodeIgniter:  
   
     CodeIgniter MongoDB Active Record Library - http://github.com/alexbilbie/codeigniter-mongodb-library/tree/v2
@@ -43,6 +50,7 @@ require a MY_controller or anything else.
 Username: admin@admin.com
 Password: password    
 
+TOTP Secret Key: MQKHSPOF65QVGBCY
 
 ###Important
 It is highly recommended that you use encrypted database sessions for security!
