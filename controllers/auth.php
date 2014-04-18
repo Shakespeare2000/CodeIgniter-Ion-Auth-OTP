@@ -122,9 +122,9 @@ class Auth extends CI_Controller {
 		$this->data['title'] = "Login";
 
 		//validate form input
-		$this->form_validation->set_rules('token'			, 'Token'		, 'required');
-		$this->form_validation->set_rules('identity'		, 'Identity'	, 'required');
-		$this->form_validation->set_rules('otp_login_key'	, 'Login key'	, 'required');
+		$this->form_validation->set_rules('token'			, 'Token', 'required');
+		$this->form_validation->set_rules('identity'		, 'Identity');
+		$this->form_validation->set_rules('otp_login_key'	, 'Login key');
 		$this->form_validation->set_rules('remember'		, 'Remember Me');
 
 		if ($this->form_validation->run() == true)
@@ -158,7 +158,10 @@ class Auth extends CI_Controller {
 		}
 		else
 		{
-			
+			if($this->session->flashdata('identity') == NULL || $this->session->flashdata('otp_login_key') == NULL)
+			{
+				redirect('auth/login', 'refresh');
+			}
 			//the user is not logging in so display the login page
 			//set the flash data error message if there is one
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');

@@ -1035,7 +1035,7 @@ class Ion_auth_model extends CI_Model
 	 * @author Mathew and SpyTec
 	 **/
 	public function otp_login($identity, $token, $remember=FALSE, $secret_key){
-		$this->trigger_events('pre_login');
+		$this->trigger_events('pre_otp_login');
 		
 		if (empty($identity) || empty($token) || empty($secret_key))
 		{
@@ -1072,7 +1072,7 @@ class Ion_auth_model extends CI_Model
 					$this->set_message('login_successful');
 					return TRUE;
 				}
-				else if($this->is_recovery_code_valid($user->id, $token, TRUE))
+				else if($this->is_backup_code_valid($user->id, $token, TRUE) && $otp->backup_codes_enabled)
 				{
 					$this->set_session($user);
 
@@ -1085,7 +1085,7 @@ class Ion_auth_model extends CI_Model
 						$this->remember_user($user->id);
 					}
 
-					$this->trigger_events(array('post_login', 'post_login_successful'));
+					$this->trigger_events(array('post_otp_login', 'post_login_successful'));
 					$this->set_message('login_successful');
 					return TRUE;
 				}
@@ -1163,34 +1163,34 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * Checks database for recovery codes and deletes if true
+	 * Checks database for backup codes and deletes if true
 	 *
 	 * @return boolean
 	 * @author SpyTec
 	 **/
-	public function is_recovery_code_valid($id, $recovery_code, $delete_recovery_code = FALSE){
+	public function is_backup_code_valid($id, $backup_code, $delete_backup_code = FALSE){
 		if ($this->otp['enabled']) {
-			if (empty($id) || empty($recovery_code))
+			if (empty($id) || empty($backup_code))
 			{
 				return FALSE;
 			}
 			
-			$this->db->select('otp_recovery_codes');
+			$this->db->select('otp_backup_codes');
 			$this->db->where("id", $id);
 			$query = $this->db->get($this->tables['users']);
 
 			if ($query->num_rows() === 1)
 			{
 				$user = $query->row();
-				if($user->otp_recovery_codes !== NULL)
+				if($user->otp_backup_codes !== NULL)
 				{
-					$otp_recovery_codes = unserialize($user->otp_recovery_codes);
-					$amount = count($otp_recovery_codes);
-					foreach ($otp_recovery_codes as $otp_recovery_code) {
-						if ($otp_recovery_code === $recovery_code) {
-							if($delete_recovery_code)
+					$otp_backup_codes = unserialize($user->otp_backup_codes);
+					$amount = count($otp_backup_codes);
+					foreach ($otp_backup_codes as $otp_backup_code) {
+						if ($otp_backup_code === $backup_code) {
+							if($delete_backup_code)
 							{
-								$this->delete_recovery_code($id, $otp_recovery_codes, $recovery_code);
+								$this->delete_backup_code($id, $otp_backup_codes, $backup_code);
 							}
 							return TRUE;
 						}
@@ -1202,41 +1202,41 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * Remove recovery code from recovery code array
+	 * Remove backup code from backup code array
 	 *
 	 * @return boolean
 	 * @author SpyTec
 	 **/
-	public function delete_recovery_code($id, $current_recovery_codes = array(), $recovery_code){
+	public function delete_backup_code($id, $current_backup_codes = array(), $backup_code){
 		if ($this->otp['enabled']) {
-			if (empty($id) || empty($current_recovery_codes) || empty($recovery_code))
+			if (empty($id) || empty($current_backup_codes) || empty($backup_code))
 			{
 				return FALSE;
 			}
-			#$current_recovery_codes = unserialize($current_recovery_codes)
-			foreach ($current_recovery_codes as $current_recovery_code) {
-				if($current_recovery_code === $recovery_code)
+			#$current_backup_codes = unserialize($current_backup_codes)
+			foreach ($current_backup_codes as $current_backup_code) {
+				if($current_backup_code === $backup_code)
 				{
-					unset($current_recovery_codes[$current_recovery_code]);
+					unset($current_backup_codes[$current_backup_code]);
 				}
 			}
 
-			if(($key = array_search($recovery_code, $current_recovery_codes)) !== FALSE) {
-			    unset($current_recovery_codes[$key]);
+			if(($key = array_search($backup_code, $current_backup_codes)) !== FALSE) {
+			    unset($current_backup_codes[$key]);
 			}
-			if(empty($current_recovery_codes))
+			if(empty($current_backup_codes))
 			{
-				$current_recovery_codes = NULL;
+				$current_backup_codes = NULL;
 			}
 			else
 			{
-				$current_recovery_codes = serialize($current_recovery_codes);
+				$current_backup_codes = serialize($current_backup_codes);
 			}
 
-			$this->db->select('otp_recovery_codes');
+			$this->db->select('otp_backup_codes');
 			$this->db->where("id", $id);
 			$data = array(
-				"otp_recovery_codes" => $current_recovery_codes
+				"otp_backup_codes" => $current_backup_codes
 				);
 			if($this->db->update($this->tables['users'], $data))
 			{

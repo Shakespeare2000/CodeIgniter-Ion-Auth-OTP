@@ -16,13 +16,13 @@ class Google_authenticator
 {
     var $otp;
     
-    protected $_codeLength = 6;
+    protected $_codeLength;
 
     public function __construct()
     {
         $this->load->config('ion_auth', TRUE);
         $this->otp = $this->config->item('otp', 'ion_auth');
-        $_codeLength = $this->otp['code_length'];
+        $this->set_code_length($this->otp['code_length']);
     }
 
     /**
@@ -71,7 +71,7 @@ class Google_authenticator
     public function get_code($secret, $timeSlice = null)
     {
         if ($timeSlice === null) {
-            $timeSlice = floor(time() / 30);
+            $timeSlice = floor(time() / $this->otp['time_step']);
         }
 
         $secretkey = $this->_base32Decode($secret);
@@ -126,7 +126,7 @@ class Google_authenticator
     public function verify_code($secret, $code, $discrepancy = 2)
     {
         $discrepancy = $this->otp['discrepancy'];
-        $currentTimeSlice = floor(time() / 30);
+        $currentTimeSlice = floor(time() / $this->otp['time_step']);
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = $this->get_code($secret, $currentTimeSlice + $i);
@@ -140,7 +140,6 @@ class Google_authenticator
 
     /**
      * Set the code length, should be >=6
-     * ======Possibly unnecessary and not working for CodeIgniter as it only works via objects. Discuss.======
      *
      * @param int $length
      * @return int
