@@ -1103,13 +1103,13 @@ class Ion_auth_model extends CI_Model
 	 * @return boolean
 	 * @author Mathew and SpyTec
 	 **/
-	public function is_gauth_token_valid($stored_key, $user_token){
+	public function is_gauth_token_valid($stored_code, $user_token){
 		if ($this->gauth['enabled']) {
 			if (empty($stored_code) || empty($user_token))
 			{
 				return FALSE;
 			}
-			if($this->google_authenticator->verify_code($stored_key, $user_token))
+			if($this->google_authenticator->verify_code($stored_code, $user_token))
 			{
 				return TRUE;
 			}
