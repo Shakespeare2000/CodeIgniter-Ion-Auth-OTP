@@ -100,33 +100,39 @@ class Google_authenticator
      *
      * @param string $name
      * @param string $secret
+     * @param string $issuer
+     * @param boolean $digits
+     * @param boolean $period
      * @return string
      */
-    public function get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = NULL) {
-        if(!$issuer)
+    public function get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = FALSE, $period = FALSE) {
+        $url = 'otpauth://totp/'.str_replace(" ", "+", $name).'?secret='.$secret;
+
+        if(empty($issuer))
         {
             $issuer = str_replace(" ", "+", $this->otp['issuer']);
-            if(!$digits)
+            if(!empty($issuer))
             {
-                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
-            }
-            else
-            {
-                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'&digits='.$digits.'');
+                $url .= '&issuer='.$issuer;
             }
         }
         else
         {
             $issuer = str_replace(" ", "+", $issuer);
-            if(!$digits)
-            {
-                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
-            }
-            else
-            {
-                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'&digits='.$digits.'');
-            }
+            $url .= '&issuer='.$issuer;
         }
+        
+        if((booL)$digits)
+        {
+            $url .= '&digits='.(int)$this->otp['code_length'];
+        }
+
+        if((booL)$period)
+        {
+            $url .= '&period='.(int)$this->otp['time_step'];
+        }
+
+        $urlencoded = urlencode($url);
 
         return 'https://chart.googleapis.com/chart?chs='.$this->otp['qr_size'].'x'.$this->otp['qr_size'].'&chld=M|0&cht=qr&chl='.$urlencoded.'';
     }
