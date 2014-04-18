@@ -102,14 +102,30 @@ class Google_authenticator
      * @param string $secret
      * @return string
      */
-    public function get_qrcode_googleurl($name, $secret, $issuer = FALSE) {
+    public function get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = NULL) {
         if(!$issuer)
         {
-            $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$this->otp['issuer'].'');
+            $issuer = str_replace(" ", "+", $this->otp['issuer']);
+            if(!$digits)
+            {
+                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
+            }
+            else
+            {
+                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'&digits='.$digits.'');
+            }
         }
         else
         {
-            $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
+            $issuer = str_replace(" ", "+", $issuer);
+            if(!$digits)
+            {
+                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'');
+            }
+            else
+            {
+                $urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'&issuer='.$issuer.'&digits='.$digits.'');
+            }
         }
 
         return 'https://chart.googleapis.com/chart?chs='.$this->otp['qr_size'].'x'.$this->otp['qr_size'].'&chld=M|0&cht=qr&chl='.$urlencoded.'';

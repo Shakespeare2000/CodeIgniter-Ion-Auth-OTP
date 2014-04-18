@@ -107,16 +107,23 @@ $config['forgot_password_expiration'] = 0;                   // The number of mi
  | otp->time_step: We RECOMMEND a default time-step size of 30 seconds. 
  | This default value of 30 seconds is selected as a balance between security and usability.
  |
+ | The code-length and time-step parameters is ignored by the
+ | Google Authenticator implementations. 
+ |
+ | The "digits", "period" and "algorithm" parameters does not work with Google Authenticator nor Authy
+ | For more info regarding uri parameters with Google Authenticator. See http://code.google.com/p/google-authenticator/wiki/KeyUriFormat
+ |
  | For more info regarding TOTP. See RFC-6238: http://tools.ietf.org/html/rfc6238
  */
 $config['otp']['enabled']				= TRUE;			// If you want to use multi-step authentication
-$config['otp']['secret_length']			= 16; 			// Length of secret key shared between you and client
+$config['otp']['backup_codes_enabled']	= TRUE; 		// If you want backup codes to be used for logging in. Recommended if the user looses his phone or can't access it
 $config['otp']['issuer'] 				= "Ion auth"; 	// A provider/issuer shown as a title on OTP mobile apps
-$config['otp']['discrepancy']			= 2; 			// This is the allowed time drift in interval units (8 means 4 minutes before or after if time-step is 30s)
 $config['otp']['qr_size']				= 200; 			// This is the generated size in pixels for the Google generated QR code
+$config['otp']['secret_length']			= 16; 			// Length of secret key shared between you and client
+$config['otp']['discrepancy']			= 2; 			// This is the allowed time drift in interval units (8 means 4 minutes before or after if time-step is 30s)
+// The following config is for future-proofing
 $config['otp']['code_length']			= 6; 			// The generated token length. Recommended to keep it at 6
 $config['otp']['time_step']				= 30; 			// The generated token time step in seconds.
-$config['otp']['backup_codes_enabled']	= TRUE; 		// If you want backup codes to be used for logging in. Recommended if the user looses his phone or can't access it
 
 
 
