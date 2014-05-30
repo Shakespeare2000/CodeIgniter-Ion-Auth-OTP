@@ -48,9 +48,7 @@ require a MY_controller or anything else.
 
 ###Default Login
 Username: admin@admin.com
-Password: password    
-
-TOTP Secret Key: MQKHSPOF65QVGBCY
+Password: password
 
 ###Important
 It is highly recommended that you use encrypted database sessions for security!
