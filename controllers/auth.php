@@ -68,7 +68,7 @@ class Auth extends CI_Controller {
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
 			{
-				if ($this->ion_auth->is_otp_set($this->input->post('identity')))
+				if ( $this->ion_auth->is_otp_set( $this->input->post('identity') ) )
 				{
 					$activation_code = $this->ion_auth->set_otp_login_activation($this->input->post('identity'));
 					if($activation_code)
@@ -634,13 +634,48 @@ class Auth extends CI_Controller {
 				$data['password'] = $this->input->post('password');
 			}
 
+			//update the otp if it was changed
+			$otp = $this->input->post('otp');
+			if(empty($otp))
+			{
+				$otp = 0;
+			}
+		
+			$secret_key = '';
+			if ((bool)$otp != ($this->form_validation->set_value('otp', (bool)$user->otp)))
+			{
+				if((bool)$otp === FALSE)
+				{
+					// Delete OTP from settings
+					$this->ion_auth->otp_delete($id);
+				}
+				else if((bool)$otp === TRUE)
+				{
+					// Create secret to redirect to otp_activation
+					$this->form_validation->set_rules('otp', $this->lang->line('edit_user_validation_otp_label'), 'xss_clean|trim');
+					if($this->ion_auth->set_otp_secret_key($id) )
+					{
+						$this->ion_auth->backup_codes($id);
+						$secret_key = $this->ion_auth->get_otp_secret_key($id);
+						#$backup_codes = $this->ion_auth->backup_codes_db($id);
+					}
+				}
+			}
+
 			if ($this->form_validation->run() === TRUE)
 			{
 				$this->ion_auth->update($user->id, $data);
 
 				//check to see if we are creating the user
 				//redirect them back to the admin page
-				$this->session->set_flashdata('message', "User Saved");
+				$this->session->set_flashdata('message', "User Saved.");
+				if(!empty($secret_key))
+				{
+					$this->session->set_flashdata('otp_secret_key', $secret_key);
+					$this->session->set_flashdata('otp_message', $user->{$this->config->item('identity', 'ion_auth')});
+					#$this->session->set_flashdata('otp_backup_codes', $backup_codes);
+					redirect('auth/otp_activation/'.$id); 
+				}
 				if ($this->ion_auth->is_admin())
 				{
 					redirect('auth', 'refresh');
@@ -697,8 +732,36 @@ class Auth extends CI_Controller {
 			'id'   => 'password_confirm',
 			'type' => 'password'
 		);
+		$this->data['otp'] = array(
+			'name' => 'otp',
+			'id'   => 'otp',
+			'value' => TRUE,
+			'checked' => $this->form_validation->set_value('otp', (bool)$user->otp)
+		);
 
 		$this->_render_page('auth/edit_user', $this->data);
+	}
+
+	// Display OTP secret key and QR-code
+	public function otp_activation($id)
+	{
+		if(!isset($id))
+		{
+			redirect('/', 'refresh');
+		}
+		$this->data['otp_secret_key'] = $this->session->flashdata('otp_secret_key');
+		if($this->data['otp_secret_key'] != NULL)
+		{
+			$this->data['message'] = $this->session->flashdata('message');
+			$this->data['google_chart_url'] = $this->ion_auth->get_qrcode_googleurl($this->session->flashdata('otp_message'), $this->data['otp_secret_key'], $this->config->item('otp', 'ion_auth')['issuer']);
+			$this->data['backup_codes'] = unserialize($this->ion_auth->backup_codes_db($id));
+
+			$this->_render_page('auth/otp_activation', $this->data);
+		}
+		else
+		{
+			redirect('/', 'refresh');
+		}
 	}
 
 	// create a new group

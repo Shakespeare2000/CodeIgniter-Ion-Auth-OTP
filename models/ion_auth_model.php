@@ -184,7 +184,7 @@ class Ion_auth_model extends CI_Model
 		$this->store_salt      = $this->config->item('store_salt', 'ion_auth');
 		$this->salt_length     = $this->config->item('salt_length', 'ion_auth');
 		$this->join			   = $this->config->item('join', 'ion_auth');
-		$this->otp		   = $this->config->item('otp', 'ion_auth');
+		$this->otp		   	   = $this->config->item('otp', 'ion_auth');
 
 
 		//initialize hash method options (Bcrypt)
@@ -695,9 +695,9 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function set_otp_login_activation($identity)
 	{
-		if (empty($identity))
+		if (empty($identity) || !$this->otp['enabled'])
 		{
-			//Change to otp_login_activation please!
+			//Change to otp_activation please!
 			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
 			return FALSE;
 		}
@@ -718,14 +718,14 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		//Possibly add an expire?
+		//Possibly add an expire for security
 		$update['otp_login_code'] = $key;
 
 		$this->db->update($this->tables['users'], $update, array($this->identity_column => $identity));
 
 		$return = $this->db->affected_rows() == 1;
 
-		//Change to otp_login_activation please!
+		//Change to otp_activation please!
 		/*if ($return)
 			$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_successful'));
 		else
@@ -742,9 +742,9 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function get_otp_login_activation($identity)
 	{
-		if (empty($identity))
+		if (empty($identity) || !$this->otp['enabled'])
 		{
-			//Change to otp_login_activation please!
+			//Change to otp_activation please!
 			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
 			return FALSE;
 		}
@@ -756,6 +756,185 @@ class Ion_auth_model extends CI_Model
 		$return = $query->row();
 
 		return $return->otp_login_code;
+	}
+
+	/**
+	 * Insert OTP backup codes
+	 * Encrypted with CI encrypt library
+	 *
+	 * @return mixed
+	 * @author Mathew, Ryan & SpyTec
+	 **/
+	public function backup_codes($id)
+	{
+		if (empty($id) || !$this->otp['enabled'])
+		{
+			//Change to otp_activation
+			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			return FALSE;
+		}
+
+		//All some more randomness
+		$backup_code_part = "";
+		if(function_exists("openssl_random_pseudo_bytes")) {
+			$backup_code_part = openssl_random_pseudo_bytes(128);
+		}
+
+		$backup_codes = array();
+		for($n=0;$n<$this->otp['backup_codes_length'];$n++)
+		{
+			for($i=0;$i<1024;$i++) {
+				$backup_code_part = substr(sha1($backup_code_part . mt_rand() . microtime()), 0, 10);
+			}
+			
+			// Only take a specific length from the hash_code function for easier login for users
+			$key = substr($this->hash_code($backup_code_part.$id), 0, $this->otp['backup_codes_length']);
+			array_push($backup_codes, $key);
+		}
+		#$this->forgotten_password_code = $key;
+
+		$this->trigger_events('extra_where');
+
+		$this->load->library('encrypt');
+		$update = array(
+		    'otp_backup_codes' => $this->encrypt->encode(serialize($backup_codes))
+		);
+
+		$this->db->where('id', $id);
+		$this->db->update($this->tables['users'], $update);
+
+		$return = $this->db->affected_rows() == 1;
+
+		if ($return)
+		{
+			//Change to otp_activation
+			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_successful'));
+			return TRUE;
+		}
+		else
+		{
+			//Change to otp_activation
+			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Get backup codes from database
+	 * Returns serialized PHP array
+	 * @return string
+	 * @author Mathew and SpyTec
+	 **/
+	public function backup_codes_db($id)
+	{
+		//Change
+		//$this->trigger_events('pre_forgotten_password_complete');
+
+		if (empty($id))
+		{
+			//Change
+			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+			return FALSE;
+		}
+
+		$this->trigger_events('extra_where');
+
+		$query = $this->db->select('otp_backup_codes')
+						  ->where('id', $this->db->escape_str($id))
+						  ->limit(1)
+						  ->get($this->tables['users'])->row();
+
+		if ($query) {
+			$this->load->library('encrypt');
+			$serialized_keys = $this->encrypt->decode($query->otp_backup_codes);
+			//Change
+			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
+			return $serialized_keys;
+		}
+
+		//Change
+		//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+		return FALSE;
+	}
+
+	/**
+	 * Remove backup code from backup code array
+	 *
+	 * @return boolean
+	 * @author SpyTec
+	 **/
+	public function delete_backup_code($id, $current_backup_codes = array(), $backup_code){
+		if (!$this->otp['enabled'] || empty($id) || empty($current_backup_codes) || empty($backup_code))
+		{
+			return FALSE;
+		}
+		foreach ($current_backup_codes as $current_backup_code) {
+			if($current_backup_code === $backup_code)
+			{
+				unset($current_backup_codes[$current_backup_code]);
+			}
+		}
+
+		if(($key = array_search($backup_code, $current_backup_codes)) !== FALSE) {
+		    unset($current_backup_codes[$key]);
+		}
+		if(empty($current_backup_codes))
+		{
+			$current_backup_codes = NULL;
+		}
+		else
+		{
+			$this->load->library('encrypt');
+			$current_backup_codes = $this->encrypt->encode(serialize($current_backup_codes));
+		}
+
+		$this->db->select('otp_backup_codes');
+		$this->db->where("id", $id);
+		$data = array(
+			"otp_backup_codes" => $current_backup_codes
+		);
+		if($this->db->update($this->tables['users'], $data))
+		{
+			return TRUE;
+		}
+	}
+
+	/**
+	 * Checks database for backup codes and deletes if true
+	 *
+	 * @return boolean
+	 * @author SpyTec
+	 **/
+	public function is_backup_code_valid($id, $backup_code, $delete_backup_code = TRUE){
+		if (!$this->otp['enabled'] || empty($id) || empty($backup_code))
+		{
+			return FALSE;
+		}
+		
+		$this->db->select('otp_backup_codes');
+		$this->db->where("id", $id);
+		$query = $this->db->get($this->tables['users']);
+
+		if ($query->num_rows() === 1)
+		{
+			$user = $query->row();
+			if($user->otp_backup_codes !== NULL)
+			{
+				$this->load->library('encrypt');
+				$otp_backup_codes = unserialize($this->encrypt->decode($user->otp_backup_codes));
+				//$amount = count($otp_backup_codes);
+				foreach ($otp_backup_codes as $otp_backup_code) {
+					if ($otp_backup_code === $backup_code) {
+						if($delete_backup_code)
+						{
+							$this->delete_backup_code($id, $otp_backup_codes, $backup_code);
+						}
+						return TRUE;
+					}
+				}
+			}
+		}
+		return FALSE;
 	}
 
 	/**
@@ -1053,7 +1232,7 @@ class Ion_auth_model extends CI_Model
 		if ($query->num_rows() === 1)
 		{
 			$user = $query->row();
-			if($this->is_otp_secret_key_valid($user->otp_login_code, $secret_key))
+			if($this->is_otp_secret_code_valid($user->otp_login_code, $secret_key))
 			{
 				if ($this->is_otp_token_valid($user->otp, $token))
 				{
@@ -1072,7 +1251,7 @@ class Ion_auth_model extends CI_Model
 					$this->set_message('login_successful');
 					return TRUE;
 				}
-				else if($this->is_backup_code_valid($user->id, $token, TRUE) && $otp->backup_codes_enabled)
+				else if($this->is_backup_code_valid($user->id, $token) && $this->otp['backup_codes_enabled'])
 				{
 					$this->set_session($user);
 
@@ -1098,21 +1277,112 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	* Set the secret key for OTP authentication
+	*
+	* @return boolean
+	* @author Mathew and SpyTec
+	*/
+	public function set_otp_secret_key($id)
+	{
+		//Change
+		//$this->trigger_events('pre_forgotten_password_complete');
+
+		if (empty($id))
+		{
+			//Change
+			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+			return FALSE;
+		}
+
+		$this->load->library('encrypt');
+		$secret_key = $this->encrypt->encode($this->google_authenticator->create_secret());
+		
+		$update = array(
+			'otp' => $secret_key
+		);
+
+		$query = $this->db->update($this->tables['users'], $update, array('id' => $id));
+		if ($query) {
+			//Change
+			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
+			return TRUE;
+		}
+
+		//Change
+		//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+		return FALSE;
+	}
+
+	/**
+	* Get secret key for OTP authentication
+	*
+	* @return string
+	* @author Mathew and SpyTec
+	*/
+	public function get_otp_secret_key($id)
+	{
+		//Change
+		//$this->trigger_events('pre_forgotten_password_complete');
+
+		if (empty($id))
+		{
+			//Change
+			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+			return FALSE;
+		}
+
+		$this->trigger_events('extra_where');
+
+		$query = $this->db->select('otp')
+						  ->where('id', (int)$id)
+						  ->limit(1)
+						  ->get($this->tables['users'])->row();
+
+		if ($query) {
+			$this->load->library('encrypt');
+			$secret_key = $this->encrypt->decode($query->otp);
+			//Change
+			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
+			return $secret_key;
+		}
+
+		//Change
+		//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+		return FALSE;
+	}
+
+	/**
+	* Provide secretly generated key from the time being. Should be changed to directly accessing Google_authenticator library
+	* 
+	* @return string
+	* @author SpyTec
+	*/
+	public function create_otp_secret()
+	{
+		return $this->google_authenticator->create_secret();
+	}
+
+	public function get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = FALSE, $period = FALSE)
+	{
+		return $this->google_authenticator->get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = FALSE, $period = FALSE);
+	}
+
+	/**
 	 * Check if token is valid
 	 *
 	 * @return boolean
 	 * @author Mathew and SpyTec
 	 **/
 	public function is_otp_token_valid($stored_code, $user_token){
-		if ($this->otp['enabled']) {
-			if (empty($stored_code) || empty($user_token))
-			{
-				return FALSE;
-			}
-			if($this->google_authenticator->verify_code($stored_code, $user_token))
-			{
-				return TRUE;
-			}
+		if (!$this->otp['enabled'] || empty($stored_code) || empty($user_token))
+		{
+			return FALSE;
+		}
+		$this->load->library('encrypt');
+		$stored_code = $this->encrypt->decode($stored_code);
+		if($this->google_authenticator->verify_code($stored_code, $user_token))
+		{
+			return TRUE;
 		}
 		return FALSE;
 	}
@@ -1123,18 +1393,16 @@ class Ion_auth_model extends CI_Model
 	 * @return boolean
 	 * @author Mathew and SpyTec
 	 **/
-	public function is_otp_secret_key_valid($stored_code, $user_code){
-		if ($this->otp['enabled']) {
-			if (empty($stored_code) || empty($user_code))
-			{
-				return FALSE;
-			}
-			if($stored_code === $user_code)
-			{
-				return TRUE;
-			}
+	public function is_otp_secret_code_valid($stored_code, $user_code){
+		if (!$this->otp['enabled'] || empty($stored_code) || empty($user_code))
+		{
+			return FALSE;
 		}
-		return FALSE;
+
+		if($stored_code === $user_code)
+		{
+			return TRUE;
+		}
 	}
 
 	/**
@@ -1144,106 +1412,52 @@ class Ion_auth_model extends CI_Model
 	 * @author SpyTec
 	 **/
 	public function is_otp_set($identity){
-		if ($this->otp['enabled']) {
-			
-			$this->db->select('otp');
-			$this->db->where($this->identity_column , $this->db->escape_str($identity));
-			$query = $this->db->get($this->tables['users']);
-
-			if ($query->num_rows() === 1)
-			{
-				$user = $query->row();
-				if($user->otp !== NULL)
-				{
-					return TRUE;
-				}
-			}
+		if(!$this->otp['enabled'] || empty($identity))
+		{
+			return FALSE;
 		}
-		return FALSE;
-	}
-
-	/**
-	 * Checks database for backup codes and deletes if true
-	 *
-	 * @return boolean
-	 * @author SpyTec
-	 **/
-	public function is_backup_code_valid($id, $backup_code, $delete_backup_code = FALSE){
-		if ($this->otp['enabled']) {
-			if (empty($id) || empty($backup_code))
-			{
-				return FALSE;
-			}
-			
-			$this->db->select('otp_backup_codes');
-			$this->db->where("id", $id);
-			$query = $this->db->get($this->tables['users']);
-
-			if ($query->num_rows() === 1)
-			{
-				$user = $query->row();
-				if($user->otp_backup_codes !== NULL)
-				{
-					$otp_backup_codes = unserialize($user->otp_backup_codes);
-					$amount = count($otp_backup_codes);
-					foreach ($otp_backup_codes as $otp_backup_code) {
-						if ($otp_backup_code === $backup_code) {
-							if($delete_backup_code)
-							{
-								$this->delete_backup_code($id, $otp_backup_codes, $backup_code);
-							}
-							return TRUE;
-						}
-					}
-				}
-			}
-		}
-		return FALSE;
-	}
-
-	/**
-	 * Remove backup code from backup code array
-	 *
-	 * @return boolean
-	 * @author SpyTec
-	 **/
-	public function delete_backup_code($id, $current_backup_codes = array(), $backup_code){
-		if ($this->otp['enabled']) {
-			if (empty($id) || empty($current_backup_codes) || empty($backup_code))
-			{
-				return FALSE;
-			}
-			#$current_backup_codes = unserialize($current_backup_codes)
-			foreach ($current_backup_codes as $current_backup_code) {
-				if($current_backup_code === $backup_code)
-				{
-					unset($current_backup_codes[$current_backup_code]);
-				}
-			}
-
-			if(($key = array_search($backup_code, $current_backup_codes)) !== FALSE) {
-			    unset($current_backup_codes[$key]);
-			}
-			if(empty($current_backup_codes))
-			{
-				$current_backup_codes = NULL;
-			}
-			else
-			{
-				$current_backup_codes = serialize($current_backup_codes);
-			}
-
-			$this->db->select('otp_backup_codes');
-			$this->db->where("id", $id);
-			$data = array(
-				"otp_backup_codes" => $current_backup_codes
-				);
-			if($this->db->update($this->tables['users'], $data))
+		$this->db->select('otp');
+		$this->db->where($this->identity_column , $this->db->escape_str($identity));
+		$query = $this->db->get($this->tables['users']);
+		if ($query->num_rows() === 1)
+		{
+			$user = $query->row();
+			if($user->otp !== NULL)
 			{
 				return TRUE;
 			}
 		}
-		return FALSE;
+	}
+
+	/**
+	* Delete OTP from user
+	* @return boolean
+	* @author Phil Sturgeon and SpyTec
+	*/
+	public function otp_delete($id)
+	{
+		//Change
+		//$this->trigger_events('pre_delete_user');
+
+		// Delete OTP settings
+		$data = array(
+			'otp' => NULL,
+			'otp_login_code' => NULL,
+			'otp_backup_codes' => NULL	
+		);
+		$this->db->where('id', $id);
+		$this->db->update($this->tables['users'], $data);
+
+		// if user does not exist in database then it returns FALSE else removes the user from groups
+		if ($this->db->affected_rows() == 0)
+		{
+		    return FALSE;
+		}
+
+		//Change
+		//$this->trigger_events(array('post_delete_user', 'post_delete_user_successful'));
+		$this->set_message('delete_successful');
+		return TRUE;
 	}
 
 	/**

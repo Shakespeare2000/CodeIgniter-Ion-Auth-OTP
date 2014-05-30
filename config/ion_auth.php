@@ -117,10 +117,12 @@ $config['forgot_password_expiration'] = 0;                   // The number of mi
  */
 $config['otp']['enabled']				= TRUE;			// If you want to use multi-step authentication
 $config['otp']['backup_codes_enabled']	= TRUE; 		// If you want backup codes to be used for logging in. Recommended if the user looses his phone or can't access it
-$config['otp']['issuer'] 				= "Ion auth"; 	// A provider/issuer shown as a title on OTP mobile apps
+$config['otp']['backup_codes_length']	= 10; 			// Length of backup codes. Should be as long as code_length or greater
+$config['otp']['issuer'] 				= "Ion Auth"; 	// A provider/issuer shown as a title on OTP mobile apps
 $config['otp']['qr_size']				= 200; 			// This is the generated size in pixels for the Google generated QR code
 $config['otp']['secret_length']			= 16; 			// Length of secret key shared between you and client
 $config['otp']['discrepancy']			= 2; 			// This is the allowed time drift in interval units (8 means 4 minutes before or after if time-step is 30s)
+
 // The following config is for future-proofing
 $config['otp']['code_length']			= 6; 			// The generated token length. Recommended to keep it at 6
 $config['otp']['time_step']				= 30; 			// The generated token time step in seconds.

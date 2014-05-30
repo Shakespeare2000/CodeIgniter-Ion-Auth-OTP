@@ -1,7 +1,7 @@
 <h1><?php echo lang('edit_user_heading');?></h1>
 <p><?php echo lang('edit_user_subheading');?></p>
 
-<div id="infoMessage"><?php echo $message;?></div>
+<div id="infoMessage"><?php echo $message; if(isset($backup_codes)){print_r(unserialize($backup_codes));}?></div>
 
 <?php echo form_open(uri_string());?>
 
@@ -34,7 +34,11 @@
             <?php echo lang('edit_user_password_confirm_label', 'password_confirm');?><br />
             <?php echo form_input($password_confirm);?>
       </p>
-
+      
+      <p>
+            <?php echo lang('edit_user_otp_label', 'otp'); ?><br />
+            <?php echo form_checkbox($otp); ?>
+      </p>
       <?php if ($this->ion_auth->is_admin()): ?>
 
           <h3><?php echo lang('edit_user_groups_heading');?></h3>
