@@ -697,8 +697,7 @@ class Ion_auth_model extends CI_Model
 	{
 		if (empty($identity) || !$this->otp['enabled'])
 		{
-			//Change to otp_activation please!
-			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			$this->trigger_events(array('post_set_otp_activation', 'post_set_otp_activation_unsuccessful'));
 			return FALSE;
 		}
 
@@ -718,18 +717,17 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		//Possibly add an expire for security
+		//Possibly add an expire for extra security
 		$update['otp_login_code'] = $key;
 
 		$this->db->update($this->tables['users'], $update, array($this->identity_column => $identity));
 
 		$return = $this->db->affected_rows() == 1;
 
-		//Change to otp_activation please!
-		/*if ($return)
-			$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_successful'));
+		if ($return)
+			$this->trigger_events(array('post_set_otp_activation', 'post_set_otp_activation_successful'));
 		else
-			$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));*/
+			$this->trigger_events(array('post_set_otp_activation', 'post_set_otp_activation_unsuccessful'));
 
 		return $return;
 	}
@@ -744,8 +742,7 @@ class Ion_auth_model extends CI_Model
 	{
 		if (empty($identity) || !$this->otp['enabled'])
 		{
-			//Change to otp_activation please!
-			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			$this->trigger_events(array('post_get_otp_activation', 'post_get_otp_activation_unsuccessful'));
 			return FALSE;
 		}
 
@@ -769,8 +766,7 @@ class Ion_auth_model extends CI_Model
 	{
 		if (empty($id) || !$this->otp['enabled'])
 		{
-			//Change to otp_activation
-			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			$this->trigger_events(array('post_backup_codes', 'post_backup_codes_unsuccessful'));
 			return FALSE;
 		}
 
@@ -807,14 +803,12 @@ class Ion_auth_model extends CI_Model
 
 		if ($return)
 		{
-			//Change to otp_activation
-			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_successful'));
+			$this->trigger_events(array('post_backup_codes', 'post_backup_codes_successful'));
 			return TRUE;
 		}
 		else
 		{
-			//Change to otp_activation
-			//$this->trigger_events(array('post_forgotten_password', 'post_forgotten_password_unsuccessful'));
+			$this->trigger_events(array('post_backup_codes', 'post_backup_codes_unsuccessful'));
 			return FALSE;
 		}
 	}
@@ -827,13 +821,11 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function backup_codes_db($id)
 	{
-		//Change
-		//$this->trigger_events('pre_forgotten_password_complete');
+		$this->trigger_events('pre_backup_codes_db');
 
 		if (empty($id))
 		{
-			//Change
-			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+			$this->trigger_events(array('post_backup_codes_db', 'post_backup_codes_db_unsuccessful'));
 			return FALSE;
 		}
 
@@ -847,13 +839,11 @@ class Ion_auth_model extends CI_Model
 		if ($query) {
 			$this->load->library('encrypt');
 			$serialized_keys = $this->encrypt->decode($query->otp_backup_codes);
-			//Change
-			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
+			$this->trigger_events(array('post_backup_codes_db', 'post_backup_codes_db_successful'));
 			return $serialized_keys;
 		}
 
-		//Change
-		//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+		$this->trigger_events(array('post_backup_codes_db', 'post_backup_codes_db_unsuccessful'));
 		return FALSE;
 	}
 
@@ -864,6 +854,7 @@ class Ion_auth_model extends CI_Model
 	 * @author SpyTec
 	 **/
 	public function delete_backup_code($id, $current_backup_codes = array(), $backup_code){
+		$this->trigger_events('pre_delete_backup_code');
 		if (!$this->otp['enabled'] || empty($id) || empty($current_backup_codes) || empty($backup_code))
 		{
 			return FALSE;
@@ -895,8 +886,10 @@ class Ion_auth_model extends CI_Model
 		);
 		if($this->db->update($this->tables['users'], $data))
 		{
+			$this->trigger_events(array('post_delete_backup_code', 'post_delete_backup_code_successful'));
 			return TRUE;
 		}
+		$this->trigger_events(array('post_delete_backup_code', 'post_delete_backup_code_unsuccessful'));
 	}
 
 	/**
@@ -922,7 +915,6 @@ class Ion_auth_model extends CI_Model
 			{
 				$this->load->library('encrypt');
 				$otp_backup_codes = unserialize($this->encrypt->decode($user->otp_backup_codes));
-				//$amount = count($otp_backup_codes);
 				foreach ($otp_backup_codes as $otp_backup_code) {
 					if ($otp_backup_code === $backup_code) {
 						if($delete_backup_code)
@@ -1218,6 +1210,7 @@ class Ion_auth_model extends CI_Model
 		
 		if (empty($identity) || empty($token) || empty($secret_key))
 		{
+			$this->trigger_events('post_login_unsuccessful');
 			$this->set_error('otp_login_unsuccessful');
 			return FALSE;
 		}
@@ -1247,7 +1240,7 @@ class Ion_auth_model extends CI_Model
 						$this->remember_user($user->id);
 					}
 
-					$this->trigger_events(array('post_login', 'post_login_successful'));
+					$this->trigger_events(array('post_login', 'post_otp_login_successful', 'post_login_successful'));
 					$this->set_message('login_successful');
 					return TRUE;
 				}
@@ -1264,7 +1257,7 @@ class Ion_auth_model extends CI_Model
 						$this->remember_user($user->id);
 					}
 
-					$this->trigger_events(array('post_otp_login', 'post_login_successful'));
+					$this->trigger_events(array('post_otp_login', 'post_otp_login_successful', 'post_login_successful'));
 					$this->set_message('login_successful');
 					return TRUE;
 				}
@@ -1284,13 +1277,11 @@ class Ion_auth_model extends CI_Model
 	*/
 	public function set_otp_secret_key($id)
 	{
-		//Change
-		//$this->trigger_events('pre_forgotten_password_complete');
+		$this->trigger_events('pre_set_otp_secret_key');
 
 		if (empty($id))
 		{
-			//Change
-			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+			$this->trigger_events(array('post_set_otp_secret_key', 'post_set_otp_secret_key_unsuccessful'));
 			return FALSE;
 		}
 
@@ -1303,13 +1294,11 @@ class Ion_auth_model extends CI_Model
 
 		$query = $this->db->update($this->tables['users'], $update, array('id' => $id));
 		if ($query) {
-			//Change
-			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
+			$this->trigger_events(array('post_set_otp_secret_key', 'post_set_otp_secret_key_successful'));
 			return TRUE;
 		}
 
-		//Change
-		//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+		$this->trigger_events(array('post_set_otp_secret_key', 'post_set_otp_secret_key_unsuccessful'));
 		return FALSE;
 	}
 
@@ -1321,13 +1310,11 @@ class Ion_auth_model extends CI_Model
 	*/
 	public function get_otp_secret_key($id)
 	{
-		//Change
-		//$this->trigger_events('pre_forgotten_password_complete');
+		$this->trigger_events('pre_get_otp_secret_key');
 
 		if (empty($id))
 		{
-			//Change
-			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+			$this->trigger_events(array('post_get_otp_secret_key', 'post_get_otp_secret_key_unsuccessful'));
 			return FALSE;
 		}
 
@@ -1341,13 +1328,11 @@ class Ion_auth_model extends CI_Model
 		if ($query) {
 			$this->load->library('encrypt');
 			$secret_key = $this->encrypt->decode($query->otp);
-			//Change
-			//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_successful'));
+			$this->trigger_events(array('post_get_otp_secret_key', 'post_get_otp_secret_key_successful'));
 			return $secret_key;
 		}
 
-		//Change
-		//$this->trigger_events(array('post_forgotten_password_complete', 'post_forgotten_password_complete_unsuccessful'));
+		$this->trigger_events(array('post_get_otp_secret_key', 'post_get_otp_secret_key_unsuccessful'));
 		return FALSE;
 	}
 
@@ -1359,11 +1344,13 @@ class Ion_auth_model extends CI_Model
 	*/
 	public function create_otp_secret()
 	{
+		$this->trigger_events('create_otp_secret');
 		return $this->google_authenticator->create_secret();
 	}
 
 	public function get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = FALSE, $period = FALSE)
 	{
+		$this->trigger_events('get_qrcode_googleurl');
 		return $this->google_authenticator->get_qrcode_googleurl($name, $secret, $issuer = NULL, $digits = FALSE, $period = FALSE);
 	}
 
@@ -1374,16 +1361,20 @@ class Ion_auth_model extends CI_Model
 	 * @author Mathew and SpyTec
 	 **/
 	public function is_otp_token_valid($stored_code, $user_token){
+		$this->trigger_events('pre_is_otp_token_valid');
 		if (!$this->otp['enabled'] || empty($stored_code) || empty($user_token))
 		{
+			$this->trigger_events(array('post_is_otp_token_valid', 'post_is_otp_token_valid_unsuccessful'));
 			return FALSE;
 		}
 		$this->load->library('encrypt');
 		$stored_code = $this->encrypt->decode($stored_code);
 		if($this->google_authenticator->verify_code($stored_code, $user_token))
 		{
+			$this->trigger_events(array('post_is_otp_token_valid', 'post_is_otp_token_valid_successful'));
 			return TRUE;
 		}
+		$this->trigger_events(array('post_is_otp_token_valid', 'post_is_otp_token_valid_unsuccessful'));
 		return FALSE;
 	}
 
@@ -1394,15 +1385,19 @@ class Ion_auth_model extends CI_Model
 	 * @author Mathew and SpyTec
 	 **/
 	public function is_otp_secret_code_valid($stored_code, $user_code){
+		$this->trigger_events('pre_is_otp_secret_code_valid');
 		if (!$this->otp['enabled'] || empty($stored_code) || empty($user_code))
 		{
+			$this->trigger_events(array('post_is_otp_secret_code_valid', 'post_is_otp_secret_code_valid_unsuccessful'));
 			return FALSE;
 		}
 
 		if($stored_code === $user_code)
 		{
+			$this->trigger_events(array('post_is_otp_secret_code_valid', 'post_is_otp_secret_code_valid_successful'));
 			return TRUE;
 		}
+		$this->trigger_events(array('post_is_otp_secret_code_valid', 'post_is_otp_secret_code_valid_unsuccessful'));
 	}
 
 	/**
@@ -1412,6 +1407,7 @@ class Ion_auth_model extends CI_Model
 	 * @author SpyTec
 	 **/
 	public function is_otp_set($identity){
+		$this->trigger_events('pre_is_otp_set');
 		if(!$this->otp['enabled'] || empty($identity))
 		{
 			return FALSE;
@@ -1424,9 +1420,11 @@ class Ion_auth_model extends CI_Model
 			$user = $query->row();
 			if($user->otp !== NULL)
 			{
+				$this->trigger_events(array('post_is_otp_set', 'post_is_otp_set_successful'));
 				return TRUE;
 			}
 		}
+		$this->trigger_events(array('post_is_otp_set', 'post_is_otp_set_unsuccessful'));
 	}
 
 	/**
@@ -1436,8 +1434,7 @@ class Ion_auth_model extends CI_Model
 	*/
 	public function otp_delete($id)
 	{
-		//Change
-		//$this->trigger_events('pre_delete_user');
+		$this->trigger_events('pre_delete_otp');
 
 		// Delete OTP settings
 		$data = array(
@@ -1448,14 +1445,14 @@ class Ion_auth_model extends CI_Model
 		$this->db->where('id', $id);
 		$this->db->update($this->tables['users'], $data);
 
-		// if user does not exist in database then it returns FALSE else removes the user from groups
+		// if user does not exist in database then it returns FALSE
 		if ($this->db->affected_rows() == 0)
 		{
+			$this->trigger_events(array('post_delete_otp', 'post_delete_otp_unsuccessful'));
 		    return FALSE;
 		}
 
-		//Change
-		//$this->trigger_events(array('post_delete_user', 'post_delete_user_successful'));
+		$this->trigger_events(array('post_delete_otp', 'post_delete_otp_successful'));
 		$this->set_message('delete_successful');
 		return TRUE;
 	}
