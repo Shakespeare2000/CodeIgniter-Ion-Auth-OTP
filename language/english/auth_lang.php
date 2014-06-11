@@ -90,7 +90,7 @@ $lang['edit_user_email_label']                       = 'Email:';
 $lang['edit_user_phone_label']                       = 'Phone:';
 $lang['edit_user_password_label']                    = 'Password: (if changing password)';
 $lang['edit_user_password_confirm_label']            = 'Confirm Password: (if changing password)';
-$lang['edit_user_otp_label']            			 = 'One Time Password Key: (if changing otp)';
+$lang['edit_user_otp_label']            			 = 'Activate Multi-Factor Authentication: (if changing otp)';
 $lang['edit_user_groups_heading']                    = 'Member of groups';
 $lang['edit_user_submit_btn']                        = 'Save User';
 $lang['edit_user_validation_fname_label']            = 'First Name';
@@ -103,7 +103,7 @@ $lang['edit_user_validation_company_label']          = 'Company Name';
 $lang['edit_user_validation_groups_label']           = 'Groups';
 $lang['edit_user_validation_password_label']         = 'Password';
 $lang['edit_user_validation_password_confirm_label'] = 'Password Confirmation';
-$lang['edit_user_validation_otp_label'] 			 = 'One Time Password Key';
+$lang['edit_user_validation_otp_label'] 			 = 'Activate Multi-Factor Authentication';
 
 // Create Group
 $lang['create_group_title']                  = 'Create Group';
@@ -153,3 +153,9 @@ $lang['reset_password_new_password_confirm_label']            = 'Confirm New Pas
 $lang['reset_password_submit_btn']                            = 'Change';
 $lang['reset_password_validation_new_password_label']         = 'New Password';
 $lang['reset_password_validation_new_password_confirm_label'] = 'Confirm New Password';
+
+// OTP Activation
+$lang['otp_activation_heading']         	= 'Multi-factor activation';
+$lang['otp_activation_scan']         		= 'Scan QR-code on Google Authenticator or Authy';
+$lang['otp_activation_scan_alt']         	= 'or enter key:';
+$lang['otp_activation_backup_codes']        = 'Backup codes (Save these in case you loose your multi-factor authentication):';
