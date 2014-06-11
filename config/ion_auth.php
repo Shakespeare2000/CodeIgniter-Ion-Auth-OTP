@@ -1,4 +1,25 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+* Name:  Ion Auth
+*
+* Version: 2.5.2
+*
+* Author: Ben Edmunds
+*		  ben.edmunds@gmail.com
+*         @benedmunds
+*
+* Added Awesomeness: Phil Sturgeon
+*
+* Location: http://github.com/benedmunds/CodeIgniter-Ion-Auth
+*
+* Created:  10.01.2009
+*
+* Description:  Modified auth system based on redux_auth with extensive customization.  This is basically what Redux Auth 2 should be.
+* Original Author name has been kept but that does not mean that the method has not been modified.
+*
+* Requirements: PHP5 or above
+*
+*/
 
 /*
 | -------------------------------------------------------------------------
@@ -65,12 +86,16 @@ $config['join']['groups'] = 'group_id';
  |
  | Be careful how high you set max_rounds, I would do your own testing on how long it takes
  | to encrypt with x rounds.
+ |
+ | salt_prefix: Used for bcrypt. Versions of PHP before 5.3.7 only support "$2a$" as the salt prefix
+ | Versions 5.3.7 or greater should use the default of "$2y$".
  */
 $config['hash_method']    = 'bcrypt';	// sha1 or bcrypt, bcrypt is STRONGLY recommended
 $config['default_rounds'] = 8;		// This does not apply if random_rounds is set to true
 $config['random_rounds']  = FALSE;
 $config['min_rounds']     = 5;
 $config['max_rounds']     = 9;
+$config['salt_prefix']    = '$2y$';
 
 /*
  | -------------------------------------------------------------------------
@@ -179,14 +204,14 @@ $config['email_forgot_password_complete'] = 'new_password.tpl.php';
  | -------------------------------------------------------------------------
  | Salt options
  | -------------------------------------------------------------------------
- | salt_length Default: 10
+ | salt_length Default: 22
  |
  | store_salt: Should the salt be stored in the database?
  | This will change your password encryption algorithm,
  | default password, 'password', changes to
  | fbaa5e216d163a02ae630ab1a43372635dd374c0 with default salt.
  */
-$config['salt_length'] = 10;
+$config['salt_length'] = 22;
 $config['store_salt']  = FALSE;
 
 /*

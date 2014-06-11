@@ -6,7 +6,7 @@ CREATE TABLE "users" (
     "otp" varchar(255),
     "otp_login_code" varchar(40),
     "otp_backup_codes" varchar(384),
-    "salt" varchar(40),
+    "salt" varchar(255),
     "email" varchar(100) NOT NULL,
     "activation_code" varchar(40),
     "forgotten_password_code" varchar(40),

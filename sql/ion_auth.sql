@@ -35,7 +35,7 @@ CREATE TABLE `users` (
   `otp` varchar(255) DEFAULT NULL,
   `otp_login_code` varchar(40) DEFAULT NULL,
   `otp_backup_codes` varchar(384) DEFAULT NULL,
-  `salt` varchar(40) DEFAULT NULL,
+  `salt` varchar(255) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `activation_code` varchar(40) DEFAULT NULL,
   `forgotten_password_code` varchar(40) DEFAULT NULL,

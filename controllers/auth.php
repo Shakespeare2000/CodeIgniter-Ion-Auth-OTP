@@ -247,7 +247,7 @@ class Auth extends CI_Controller {
 		}
 		else
 		{
-			$identity = $this->session->userdata($this->config->item('identity', 'ion_auth'));
+			$identity = $this->session->userdata('identity');
 
 			$change = $this->ion_auth->change_password($identity, $this->input->post('old'), $this->input->post('new'));
 
@@ -268,7 +268,7 @@ class Auth extends CI_Controller {
 	//forgot password
 	function forgot_password()
 	{
-		$this->form_validation->set_rules('email', $this->lang->line('forgot_password_validation_email_label'), 'required');
+		$this->form_validation->set_rules('email', $this->lang->line('forgot_password_validation_email_label'), 'required|valid_email');
 		if ($this->form_validation->run() == false)
 		{
 			//setup the input
