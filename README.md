@@ -15,7 +15,7 @@ This branch includes multi-factor authentication with (T)OTP for PHP 5 >= 5.1.2.
 with Google Authenticator and Authy on both Android and iOS. Should work
 with any other app that follows [RFC-6238](http://tools.ietf.org/html/rfc6238).
 
-Is this branch behind [Ion-Auth 2](https://github.com/iamfiscus/codeigniter-ion-auth-migration) feel free to contact me to pull from the main repo.
+Is this branch behind [Ion-Auth 2](https://github.com/benedmunds/CodeIgniter-Ion-Auth) feel free to contact me to pull from the main repo.
 
 MongoDB is yet to be configured for TOTP, send a PR if you've fixed it.
 
