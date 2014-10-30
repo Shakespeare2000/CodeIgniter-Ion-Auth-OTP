@@ -174,7 +174,7 @@ class Auth extends CI_Controller {
 				'identity' => $this->session->flashdata('identity')
 			);
 			$this->data['remember'] = array(
-				'remember' => $this->session->flashdata('remember')
+				'remember' => $this->session->flashdata('remember_me')
 			);
 			$this->data['otp_login_key'] = array(
 				'otp_login_key' => $this->session->flashdata('otp_login_key')
