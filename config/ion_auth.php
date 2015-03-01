@@ -23,31 +23,6 @@
 
 /*
 | -------------------------------------------------------------------------
-| Database Type
-| -------------------------------------------------------------------------
-| If set to TRUE, Ion Auth will use MongoDB as its database backend.
-|
-| If you use MongoDB there are two external dependencies that have to be
-| integrated with your project:
-|   CodeIgniter MongoDB Active Record Library - http://github.com/alexbilbie/codeigniter-mongodb-library/tree/v2
-|   CodeIgniter MongoDB Session Library - http://github.com/sepehr/ci-mongodb-session
-*/
-$config['use_mongodb'] = FALSE;
-
-/*
-| -------------------------------------------------------------------------
-| MongoDB Collection.
-| -------------------------------------------------------------------------
-| Setup the mongodb docs using the following command:
-| $ mongorestore sql/mongo
-|
-*/
-$config['collections']['users']          = 'users';
-$config['collections']['groups']         = 'groups';
-$config['collections']['login_attempts'] = 'login_attempts';
-
-/*
-| -------------------------------------------------------------------------
 | Tables.
 | -------------------------------------------------------------------------
 | Database table names.
@@ -81,8 +56,9 @@ $config['join']['groups'] = 'group_id';
  | but remember the more rounds you set the longer it will take to hash (CPU usage) So adjust
  | this based on your server hardware.
  |
- | If you are using Bcrypt the Admin password field also needs to be changed in order login as admin:
- | $2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36
+ | If you are using Bcrypt the Admin password field also needs to be changed in order to login as admin:
+ | $2y$: $2y$08$200Z6ZZbp3RAEXoaWcMA6uJOFicwNZaqk4oDhqTUiFXFe63MG.Daa
+ | $2a$: $2a$08$6TTcWD1CJ8pzDy.2U3mdi.tpl.nYOR1pwYXwblZdyQd9SL16B7Cqa
  |
  | Be careful how high you set max_rounds, I would do your own testing on how long it takes
  | to encrypt with x rounds.
@@ -95,7 +71,7 @@ $config['default_rounds'] = 8;		// This does not apply if random_rounds is set t
 $config['random_rounds']  = FALSE;
 $config['min_rounds']     = 5;
 $config['max_rounds']     = 9;
-$config['salt_prefix']    = '$2y$';
+$config['salt_prefix']    = version_compare(PHP_VERSION, '5.3.7', '<') ? '$2a$' : '$2y$';
 
 /*
  | -------------------------------------------------------------------------
@@ -123,6 +99,16 @@ $config['track_login_ip_address']     = TRUE;                // Track login atte
 $config['maximum_login_attempts']     = 3;                   // The maximum number of failed login attempts.
 $config['lockout_time']               = 600;                 // The number of seconds to lockout an account due to exceeded attempts
 $config['forgot_password_expiration'] = 0;                   // The number of milliseconds after which a forgot password request will expire. If set to 0, forgot password requests will not expire.
+
+/*
+ | -------------------------------------------------------------------------
+ | Cookie options.
+ | -------------------------------------------------------------------------
+ | remember_cookie_name Default: remember_code
+ | identity_cookie_name Default: identity
+ */
+$config['remember_cookie_name'] = 'remember_code';
+$config['identity_cookie_name'] = 'identity';
 
 /*
  | -------------------------------------------------------------------------
