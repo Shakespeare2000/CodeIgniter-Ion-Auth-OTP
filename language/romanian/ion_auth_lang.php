@@ -20,6 +20,10 @@ $lang['account_creation_unsuccessful'] 	 	 = 'Nu am reusit sa creez contul';
 $lang['account_creation_duplicate_email'] 	 = 'Email deja folosit sau invalid';
 $lang['account_creation_duplicate_username'] = 'Numele de utilizator este deja folosit sau invalid';
 
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Grupul default nu a fost setat';
+$lang['account_creation_invalid_default_group'] = 'Ati setat un nume gresit pentru grupul default';
+
 // Password
 $lang['password_change_successful'] 	 	 = 'Parola schimbata cu succes';
 $lang['password_change_unsuccessful'] 	  	 = 'Nu am reusit sa schimb parola';
@@ -53,6 +57,7 @@ $lang['group_already_exists']       = 'Numele de grup a fost deja utilizat';
 $lang['group_update_successful']    = 'Detaliile grupului au fost actualizate';
 $lang['group_delete_successful']    = 'Grup sters cu succes';
 $lang['group_delete_unsuccessful'] 	= 'Nu am putut sterge grupul';
+$lang['group_delete_notallowed']    = 'Nu pot sterge grupul administratorilor';
 $lang['group_name_required'] 		= 'Este necesar un nume pentru grup';
 
 // Activation Email

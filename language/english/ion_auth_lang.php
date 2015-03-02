@@ -19,6 +19,8 @@ $lang['account_creation_successful'] 	  	 = 'Account Successfully Created';
 $lang['account_creation_unsuccessful'] 	 	 = 'Unable to Create Account';
 $lang['account_creation_duplicate_email'] 	 = 'Email Already Used or Invalid';
 $lang['account_creation_duplicate_username'] = 'Username Already Used or Invalid';
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // Password
 $lang['password_change_successful'] 	 	 = 'Password Successfully Changed';
@@ -57,6 +59,7 @@ $lang['group_already_exists']       = 'Group name already taken';
 $lang['group_update_successful']    = 'Group details updated';
 $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
+$lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
 
 // Activation Email
