@@ -1,7 +1,7 @@
 #Ion Auth 2 OTP
 ###The future of authentication
 by [Ben Edmunds](http://benedmunds.com)
-& TOTP by [SpyTec](http://spytec.se)
+& TOTP by [SpyTec](https://spytec.se)
 
 Redux Auth 2 had a lot of potential.  It's lightweight, simple, and clean, 
 but had a ton of bugs and was missing some key features.  So we refactored 
