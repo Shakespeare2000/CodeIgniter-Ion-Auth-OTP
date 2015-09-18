@@ -18,7 +18,11 @@
 $lang['account_creation_successful']         = '帳號建立成功';
 $lang['account_creation_unsuccessful']       = '無法建立帳號';
 $lang['account_creation_duplicate_email']    = '電子郵件已被使用或不合法';
+<<<<<<< HEAD
 $lang['account_creation_duplicate_username'] = '帳號已存在或不合法';
+=======
+$lang['account_creation_duplicate_identity'] = '帳號已存在或不合法';
+>>>>>>> upstream/2
 $lang['account_creation_missing_default_group'] = '尚未設定預設群組';
 $lang['account_creation_invalid_default_group'] = '預設群組名稱不合法';
 
@@ -57,6 +61,7 @@ $lang['group_delete_successful']    = '群組已刪除';
 $lang['group_delete_unsuccessful']  = '刪除群組失敗';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required']        = '群組名稱為必填欄位';
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
 
 // Activation Email
 $lang['email_activation_subject']  = '啟動帳號';

@@ -1,15 +1,15 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
 * Name:  Ion Auth Lang - Swedish
-* 
+*
 * Author: Ben Edmunds
 * 		  ben.edmunds@gmail.com
 *         @benedmunds
-* 
+*
 * Location: http://github.com/benedmunds/ion_auth/
 *
-* Created:  03.14.2010 
-* 
+* Created:  03.14.2010
+*
 * Description:  Swedish language file for Ion Auth messages and errors
 *
 */
@@ -18,7 +18,11 @@
 $lang['account_creation_successful']         = 'Kontot har nu skapats';
 $lang['account_creation_unsuccessful']       = 'Det gick inte att skapa kontot';
 $lang['account_creation_duplicate_email']    = 'E-postadressen är ogiltig eller används redan';
-$lang['account_creation_duplicate_username'] = 'Användarnamnet är ogiltigt eller används redan';
+$lang['account_creation_duplicate_identity'] = 'Användarnamnet är ogiltigt eller används redan';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Standard grupp är inte satt';
+$lang['account_creation_invalid_default_group'] = 'Ogiltlig standard grupp namn satt';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -45,7 +49,7 @@ $lang['login_unsuccessful']     = 'Inloggningen misslyckades';
 $lang['login_unsuccessful_not_active'] 		 = 'Account is inactive';
 $lang['login_timeout']                       = 'Temporarily Locked Out.  Try again later.';
 $lang['logout_successful']      = 'Du är nu utloggad';
-  
+
 // Account Changes
 $lang['update_successful']      = 'Kontouppgifterna uppdaterades';
 $lang['update_unsuccessful']    = 'Det gick inte att uppdatera kontouppgifterna';
@@ -60,6 +64,10 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+>>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']   = 'Kontoaktivering';

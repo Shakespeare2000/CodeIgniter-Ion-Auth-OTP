@@ -18,7 +18,11 @@
 $lang['account_creation_successful']         = 'Konto on loodud';
 $lang['account_creation_unsuccessful']       = 'Konto loomine ebaõnnestus';
 $lang['account_creation_duplicate_email']    = 'E-posti aadress on juba kasutusel või vigane.';
-$lang['account_creation_duplicate_username'] = 'Kasutajanimi on juba kasutusel või vigane.';
+$lang['account_creation_duplicate_identity'] = 'Kasutajanimi on juba kasutusel või vigane.';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -60,6 +64,11 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Account Activation';
 $lang['email_activate_heading']    = 'Activate account for %s';

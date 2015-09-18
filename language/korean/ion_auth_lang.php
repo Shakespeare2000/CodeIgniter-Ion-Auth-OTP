@@ -18,7 +18,11 @@
 $lang['account_creation_successful'] 	  	 = '계정을 만들었습니다';
 $lang['account_creation_unsuccessful'] 	 	 = '계정을 만들 수 없습니다';
 $lang['account_creation_duplicate_email'] 	 = '이 이메일은 사용중이거나 올바르지 않습니다';
-$lang['account_creation_duplicate_username'] = '이 계정명은 사용중이거나 올바르지 않습니다';
+$lang['account_creation_duplicate_identity'] = '이 계정명은 사용중이거나 올바르지 않습니다';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -59,6 +63,7 @@ $lang['group_delete_successful']    = '그룹을 삭제했습니다';
 $lang['group_delete_unsuccessful'] 	= '그룹을 삭제할 수 없습니다';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= '그룹 이름을 입력해 주십시오';
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
 
 // Activation Email
 $lang['email_activation_subject']            = '계정 활성화 방법을 보내드립니다';

@@ -1,28 +1,32 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
 * Name:  Ion Auth Lang - Polish
-* 
+*
 * Author: Bart Majewski
 * 		  hello@bartoszmajewski.pl
 *         @bart_majewski
  * Updates: Slawomir Jasinski
  * 			slav123@gmail.com
  * 			@slavomirj
-* 
+*
 * Location: http://github.com/benedmunds/ion_auth/
-*          
+*
 * Created:  03.23.2010
 * Updated:  22.08.2012
-* 
+*
 * Description:  Polish language file for Ion Auth messages and errors
-* 
+*
 */
 
 // Account Creation
 $lang['account_creation_successful'] 		 = 'Konto zostało pomyślnie założone';
 $lang['account_creation_unsuccessful'] 		 = 'Nie można utworzyć konta';
 $lang['account_creation_duplicate_email'] 	 = 'Podany adres Email jest nieprawidłowy lub został już użyty';
-$lang['account_creation_duplicate_username'] = 'Podana nazwa użytkownika jest nieprawidłowa lub została już użyta';
+$lang['account_creation_duplicate_identity'] = 'Podana nazwa użytkownika jest nieprawidłowa lub została już użyta';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -64,6 +68,11 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Aktywacja Konta';
 $lang['email_activate_heading']    = 'Activate account for %s';

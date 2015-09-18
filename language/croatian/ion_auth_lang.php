@@ -21,7 +21,11 @@
 $lang['account_creation_successful'] 	  	 = 'Račun je uspješno kreiran';
 $lang['account_creation_unsuccessful'] 	 	 = 'Račun nije kreiran';
 $lang['account_creation_duplicate_email'] 	 = 'Email je već iskorišten ili krivi';
-$lang['account_creation_duplicate_username'] = 'Korisničko ime je već iskorišteno ili krivo';
+$lang['account_creation_duplicate_identity'] = 'Korisničko ime je već iskorišteno ili krivo';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -62,6 +66,11 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Aktivacija računa';
 $lang['email_activate_heading']    = 'Activate account for %s';

@@ -1,29 +1,33 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
 * Name:         Ion Auth Lang - German
-* 
+*
 * Author:       Ben Edmunds
 * 		        ben.edmunds@gmail.com
 *               @benedmunds
 * Translation:  Bernd Hückstädt (akademie@joytopia.net), Benjamin Neu (benny@duxu.de)
-* 		      
-* 
-* 
+*
+*
+*
 * Location:     http://github.com/benedmunds/ion_auth/
-*          
-* Created:  04.02.2010 
+*
+* Created:  04.02.2010
 * Last-Edit: 22.02.2014
-* 
+*
 * Description:      German language file for Ion Auth messages and errors
 * Beschreibung:     Deutsche Sprach-Datei für Ion Auth System- und Fehlermeldungen
-* 
+*
 */
 
 // Account Creation
 $lang['account_creation_successful'] 	  	     = 'Das Benutzerkonto wurde erfolgreich erstellt';
 $lang['account_creation_unsuccessful'] 	         = 'Das Benutzerkonto konnte nicht erstellt werden';
 $lang['account_creation_duplicate_email']        = 'Die E-Mail-Adresse ist ungültig oder wird bereits verwendet';
-$lang['account_creation_duplicate_username'] 	 = 'Der Benutzername ist ungültig oder wird bereits verwendet';
+$lang['account_creation_duplicate_identity'] 	 = 'Der Benutzername ist ungültig oder wird bereits verwendet';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -50,7 +54,7 @@ $lang['login_unsuccessful'] 		 = 'Login fehlgeschlagen';
 $lang['login_unsuccessful_not_active'] = 'Der Account ist deaktiviert';
 $lang['login_timeout']                       = 'Temporarily Locked Out.  Try again later.';
 $lang['logout_successful'] 		 	 = 'Logout erfolgreich';
-  
+
 // Account Changes
 $lang['update_successful'] 		 	 = 'Die Konto-Informationen wurden erfolgreich geändert';
 $lang['update_unsuccessful'] 		 = 'Die Konto-Informationen konnten nicht geändert werden';
@@ -65,6 +69,11 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Aktivierung des Kontos';
 $lang['email_activate_heading']    = 'Activate account for %s';

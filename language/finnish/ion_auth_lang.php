@@ -18,7 +18,11 @@
 $lang['account_creation_successful']             = 'Tili luotiin onnistuneesti!';
 $lang['account_creation_unsuccessful']           = 'Tilin luonti epäonnistui';
 $lang['account_creation_duplicate_email']        = 'Sähköpostiosoite on virheellinen tai se on jo käytössä';
-$lang['account_creation_duplicate_username']     = 'Tunnus on virheellinen tai se on jo käytössä';
+$lang['account_creation_duplicate_identity']     = 'Tunnus on virheellinen tai se on jo käytössä';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -44,7 +48,7 @@ $lang['login_unsuccessful']                      = 'Kirjautuminen epäonnistui';
 $lang['login_unsuccessful_not_active']           = 'Tiliä ei aktivoitu';
 $lang['login_timeout']                           = 'Väliaikaisesti suljettu. Yritä uudelleen myöhemmin.';
 $lang['logout_successful']                       = 'Olet nyt kirjautunut ulos';
-  
+
 // Account Changes
 $lang['update_successful']                       = 'Tilin tiedot päivitetty!';
 $lang['update_unsuccessful']                     = 'Tietojen päivitys epäonnistui';
@@ -59,6 +63,7 @@ $lang['group_delete_successful']                 = 'Ryhmä poistettu';
 $lang['group_delete_unsuccessful']               = 'Ryhmän poisto epäonnistui';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required']                     = 'Ryhmän nimi tarvitaan';
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
 
 // Activation Email
 $lang['email_activation_subject']            = 'Tilin aktivointi';

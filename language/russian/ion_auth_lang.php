@@ -20,7 +20,11 @@
 $lang['account_creation_successful'] 	  	 = 'Учетная запись успешно создана';
 $lang['account_creation_unsuccessful'] 	 	 = 'Невозможно создать учетную запись';
 $lang['account_creation_duplicate_email'] 	 = 'Электронная почта используется или некорректна';
-$lang['account_creation_duplicate_username'] 	 = 'Имя пользователя существует или некорректно';
+$lang['account_creation_duplicate_identity'] 	 = 'Имя пользователя существует или некорректно';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Группа по умолчанию не установлена';
+$lang['account_creation_invalid_default_group'] = 'Группа по умолчанию задана некорректно';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Группа по умолчанию не установлена';
@@ -61,6 +65,11 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Активация учетной записи';
 $lang['email_activate_heading']    = 'Activate account for %s';

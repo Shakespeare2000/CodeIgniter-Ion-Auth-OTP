@@ -5,7 +5,7 @@
 * Author: Rob Davarnia
 *         robdvr@gmail.com
 *         @robdvr
-*         
+*
 * Modification: Ghasem Shahabi
 * 		  ghasem.shahabi@gmail.com
 * 		  @GhasemShahabi
@@ -23,7 +23,11 @@
 $lang['account_creation_successful'] 	  	 = 'حساب کاربري با موفقیت ايجاد شد';
 $lang['account_creation_unsuccessful'] 	 	 = 'ايجاد حساب کاربري با شكست مواجه شد';
 $lang['account_creation_duplicate_email'] 	 = 'ایمیل قبلا استفاده شده است';
-$lang['account_creation_duplicate_username'] = 'نام کاربری قبلا استفاده شده است';
+$lang['account_creation_duplicate_identity'] = 'نام کاربری قبلا استفاده شده است';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -64,6 +68,10 @@ $lang['group_delete_successful']    = 'گروه حذف شد';
 $lang['group_delete_unsuccessful'] 	= 'امكان حذف گروه وجود ندارد';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+>>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']            = 'فعال سازی حساب کاربري';

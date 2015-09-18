@@ -1,26 +1,30 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
 * Name:  Ion Auth Lang - Catalan
-* 
+*
 * Author: Wilfrido García Espinosa
 * 		  contacto@wilfridogarcia.com
 *         @wilfridogarcia
 *
 * Translation: Oriol Navascuez
-* 
+*
 * Location: http://github.com/benedmunds/ion_auth/
-*          
-* Created:  05.04.2010 
-* 
+*
+* Created:  05.04.2010
+*
 * Description:  Catalan language file for Ion Auth messages and errors
-* 
+*
 */
 
 // Account Creation
 $lang['account_creation_successful']			= 'Compte creat amb èxit';
 $lang['account_creation_unsuccessful']			= 'No ha estat possible crear al compte';
 $lang['account_creation_duplicate_email']		= 'Email en ús o invàlid';
-$lang['account_creation_duplicate_username']	= 'Nom d&#39;usuari en ús o invàlid';
+$lang['account_creation_duplicate_identity']	= 'Nom d&#39;usuari en ús o invàlid';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -64,6 +68,11 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		    = 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Activació del compte';
 $lang['email_activate_heading']    = 'Activate account for %s';

@@ -18,7 +18,11 @@
 $lang['account_creation_successful'] 	  	 = 'Регистрацията бе създадена успешно';
 $lang['account_creation_unsuccessful'] 	 	 = 'Неуспешен опит за създаване на регистрация';
 $lang['account_creation_duplicate_email'] 	 = 'Email адреса е вече използван или невалиден';
-$lang['account_creation_duplicate_username'] = 'Потребителското име е вече използвано или невалидно';
+$lang['account_creation_duplicate_identity'] = 'Потребителското име е вече използвано или невалидно';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -60,6 +64,10 @@ $lang['group_delete_unsuccessful'] 	= 'Неуспешен опит за изтр
 //TO DO Please translate
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+>>>>>>> upstream/2
 
 //TO DO Please translate
 // Activation Email

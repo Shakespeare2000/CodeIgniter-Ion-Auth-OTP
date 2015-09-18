@@ -18,7 +18,11 @@
 $lang['account_creation_successful']            = '账号创建成功';
 $lang['account_creation_unsuccessful']          = '账号创建失败';
 $lang['account_creation_duplicate_email']       = '电子邮件已被使用或不合法';
+<<<<<<< HEAD
 $lang['account_creation_duplicate_username']    = '账号已存在或不合法';
+=======
+$lang['account_creation_duplicate_identity']    = '账号已存在或不合法';
+>>>>>>> upstream/2
 $lang['account_creation_missing_default_group'] = '尚未设定默认群组';
 $lang['account_creation_invalid_default_group'] = '默认群组名称不合法';
 
@@ -48,6 +52,7 @@ $lang['update_successful']   = '账号资料已更新';
 $lang['update_unsuccessful'] = '更新账号资料失败';
 $lang['delete_successful']   = '账号已删除';
 $lang['delete_unsuccessful'] = '删除账号失败';
+<<<<<<< HEAD
 
 // Groups
 $lang['group_creation_successful']  = 'Group created Successfully';
@@ -57,6 +62,19 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
+=======
+
+// Groups
+$lang['group_creation_successful']  = 'Group created Successfully';
+$lang['group_already_exists']       = 'Group name already taken';
+$lang['group_update_successful']    = 'Group details updated';
+$lang['group_delete_successful']    = 'Group deleted';
+$lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
+$lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
+$lang['group_name_required'] 		= 'Group name is a required field';
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+
+>>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']         = '帐号激活';
 $lang['email_activate_heading']    = 'Activate account for %s';

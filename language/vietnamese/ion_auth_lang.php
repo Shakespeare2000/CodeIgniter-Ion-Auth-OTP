@@ -18,7 +18,11 @@
 $lang['account_creation_successful'] 	  	 = 'Đã khởi tạo tài khoản thành công';
 $lang['account_creation_unsuccessful'] 	 	 = 'Không thể tạo tài khoản vào lúc này';
 $lang['account_creation_duplicate_email'] 	 = 'Địa chỉ email không hợp lệ hoặc đã được sử dụng';
+<<<<<<< HEAD
 $lang['account_creation_duplicate_username'] = 'Tên tài khoản không hợp lệ hoặc đã được sử dụng';
+=======
+$lang['account_creation_duplicate_identity'] = 'Tên tài khoản không hợp lệ hoặc đã được sử dụng';
+>>>>>>> upstream/2
 
 // Password
 $lang['password_change_successful'] 	 	 = 'Đã thay đổi mật khẩu thành công';
@@ -55,6 +59,10 @@ $lang['group_delete_successful']    = 'Đã xoá nhóm';
 $lang['group_delete_unsuccessful'] 	= 'Không thể xoá nhóm vào lúc này';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Vui lòng nhập tên nhóm';
+<<<<<<< HEAD
+=======
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
+>>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']            = 'Kích hoạt tài khoản';

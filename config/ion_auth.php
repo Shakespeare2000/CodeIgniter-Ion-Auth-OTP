@@ -86,7 +86,7 @@ $config['site_title']                 = "Example.com";       // Site Title, exam
 $config['admin_email']                = "admin@example.com"; // Admin Email, admin@example.com
 $config['default_group']              = 'members';           // Default group, use name
 $config['admin_group']                = 'admin';             // Default administrators group, use name
-$config['identity']                   = 'email';             // A database column which is used to login with
+$config['identity']                   = 'email';             // You can use any unique column in your table as identity column. The values in this column, alongside password, will be used for login purposes
 $config['min_password_length']        = 8;                   // Minimum Required Length of Password
 $config['max_password_length']        = 20;                  // Maximum Allowed Length of Password
 $config['email_activation']           = FALSE;               // Email Activation for registration
@@ -109,6 +109,7 @@ $config['forgot_password_expiration'] = 0;                   // The number of mi
  */
 $config['remember_cookie_name'] = 'remember_code';
 $config['identity_cookie_name'] = 'identity';
+<<<<<<< HEAD
 
 /*
  | -------------------------------------------------------------------------
@@ -139,6 +140,8 @@ $config['otp']['code_length']			= 6; 			// The generated token length. Recommend
 $config['otp']['time_step']				= 30; 			// The generated token time step in seconds.
 
 
+=======
+>>>>>>> upstream/2
 
 /*
  | -------------------------------------------------------------------------
@@ -208,8 +211,8 @@ $config['store_salt']  = FALSE;
 $config['delimiters_source']       = 'config'; 	// "config" = use the settings defined here, "form_validation" = use the settings defined in CI's form validation library
 $config['message_start_delimiter'] = '<p>'; 	// Message start delimiter
 $config['message_end_delimiter']   = '</p>'; 	// Message end delimiter
-$config['error_start_delimiter']   = '<p>';		// Error mesage start delimiter
-$config['error_end_delimiter']     = '</p>';	// Error mesage end delimiter
+$config['error_start_delimiter']   = '<p>';		// Error message start delimiter
+$config['error_end_delimiter']     = '</p>';	// Error message end delimiter
 
 /* End of file ion_auth.php */
 /* Location: ./application/config/ion_auth.php */

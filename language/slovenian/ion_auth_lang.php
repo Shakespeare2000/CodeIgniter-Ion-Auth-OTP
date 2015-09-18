@@ -4,7 +4,7 @@
 *
 * Author: Žiga Drnovšček
 * 		  ziga.drnovscek@gmail.com
-*         
+*
 *
 *
 * Location: http://github.com/benedmunds/ion_auth/
@@ -19,7 +19,11 @@
 $lang['account_creation_successful'] 	  	 = 'Račun je bil uspešno ustvarjen';
 $lang['account_creation_unsuccessful'] 	 	 = 'Ni mogoče ustvariti računa';
 $lang['account_creation_duplicate_email'] 	 = 'Elektronski naslov je neveljaven ali pa že obstaja';
-$lang['account_creation_duplicate_username'] = 'Uporabniško ime je neveljavno ali pa že obstaja';
+$lang['account_creation_duplicate_identity'] = 'Uporabniško ime je neveljavno ali pa že obstaja';
+
+// TODO Please Translate
+$lang['account_creation_missing_default_group'] = 'Default group is not set';
+$lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 
 // TODO Please Translate
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
@@ -60,6 +64,7 @@ $lang['group_delete_successful']    = 'Skupina izbrisana';
 $lang['group_delete_unsuccessful'] 	= 'Ni možno izbrisati skupine';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Ime skupine je obvezno polje';
+$lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
 
 // Activation Email
 $lang['email_activation_subject']            = 'Aktivacija računa';
