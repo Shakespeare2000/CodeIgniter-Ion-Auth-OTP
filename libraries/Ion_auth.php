@@ -139,7 +139,7 @@ class Ion_auth
 		if ( $this->ion_auth_model->set_otp_login_activation($identity) )
 		{
 			// Get user information
-			$user = $this->where($this->config->item('identity', 'ion_auth'), $identity)->where('active', 1)->users()->row();  //changed to get_user_by_identity from email
+			$user = $this->where($this->config->item('identity', 'ion_auth'), $identity)->where('active', 1)->users()->row(); // changed to get_user_by_identity from email
 
 			if ($user)
 			{
@@ -161,16 +161,16 @@ class Ion_auth
 	/**
 	 * forgotten password feature
 	 *
-	 * @return mixed  boolian / array
+	 * @return mixed  boolean / array
 	 * @author Mathew
 	 **/
-	public function forgotten_password($identity)    //changed $email to $identity
+	public function forgotten_password($identity) //changed $email to $identity
 	{
-		if ( $this->ion_auth_model->forgotten_password($identity) )   //changed
+		if ( $this->ion_auth_model->forgotten_password($identity) ) //changed
 		{
 			// Get user information
-      $identifier = $this->ion_auth_model->identity_column; // use model identity column, so it can be overridden in a controller
-      $user = $this->where($identifier, $identity)->where('active', 1)->users()->row();  // changed to get_user_by_identity from email
+			$identifier = $this->ion_auth_model->identity_column; // use model identity column, so it can be overridden in a controller
+			$user = $this->where($identifier, $identity)->where('active', 1)->users()->row(); // changed to get_user_by_identity from email
 
 			if ($user)
 			{
@@ -228,8 +228,8 @@ class Ion_auth
 	{
 		$this->ion_auth_model->trigger_events('pre_password_change');
 
-		$identity = $this->config->item('identity', 'ion_auth');
-		$profile  = $this->where('forgotten_password_code', $code)->users()->row(); //pass the code to profile
+		$identity	= $this->config->item('identity', 'ion_auth');
+		$profile	= $this->where('forgotten_password_code', $code)->users()->row(); //pass the code to profile
 
 		if (!$profile)
 		{
@@ -243,8 +243,8 @@ class Ion_auth
 		if ($new_password)
 		{
 			$data = array(
-				'identity'     => $profile->{$identity},
-				'new_password' => $new_password
+				'identity'			=> $profile->{$identity},
+				'new_password'	=> $new_password
 			);
 			if(!$this->config->item('use_ci_email', 'ion_auth'))
 			{
@@ -364,15 +364,15 @@ class Ion_auth
 				return FALSE;
 			}
 
-			$activation_code = $this->ion_auth_model->activation_code;
-			$identity        = $this->config->item('identity', 'ion_auth');
-			$user            = $this->ion_auth_model->user($id)->row();
+			$activation_code	= $this->ion_auth_model->activation_code;
+			$identity					= $this->config->item('identity', 'ion_auth');
+			$user							= $this->ion_auth_model->user($id)->row();
 
 			$data = array(
-				'identity'   => $user->{$identity},
-				'id'         => $user->id,
-				'email'      => $email,
-				'activation' => $activation_code,
+				'identity'		=> $user->{$identity},
+				'id'					=> $user->id,
+				'email'				=> $email,
+				'activation'	=> $activation_code,
 			);
 			if(!$this->config->item('use_ci_email', 'ion_auth'))
 			{
