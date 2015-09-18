@@ -29,18 +29,6 @@ application/config/ion_auth.php.
 CodeIgniter v3 requires the class names to be ucfirst().  In order to support this follow the standard installation procedures and then either rename the following files or create symlinks
 
 	models/ion_auth_model.php         =>   models/Ion_auth_model.php
-
-###Relational DB Setup
-Then just run the appropriate SQL file (if you're using migrations you can 
-get the migrations from JD here: 
-https://github.com/iamfiscus/codeigniter-ion-auth-migration).  
-
-
-##Usage   
-In the package you will find example usage code in the controllers and views 
-folders.  The example code isn't the most beautiful code you'll ever see but 
-it'll show you how to use the library and it's nice and generic so it doesn't 
-=======
 	controllers/auth.php              =>   controllers/Auth.php
   
 ###Relational DB Setup
