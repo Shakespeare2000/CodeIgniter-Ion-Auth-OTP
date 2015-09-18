@@ -461,11 +461,7 @@ class Ion_auth_model extends CI_Model
 			                  ->where('activation_code', $code)
 			                  ->where('id', $id)
 			                  ->limit(1)
-<<<<<<< HEAD
-	    				  ->order_by('id', 'desc')
-=======
-		    				  ->order_by('id', 'desc')
->>>>>>> upstream/2
+												->order_by('id', 'desc')
 			                  ->get($this->tables['users']);
 
 			$result = $query->row();
@@ -594,11 +590,7 @@ class Ion_auth_model extends CI_Model
 		$query = $this->db->select('id, password, salt')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
-<<<<<<< HEAD
-	    			  ->order_by('id', 'desc')
-=======
-		    			  ->order_by('id', 'desc')
->>>>>>> upstream/2
+											->order_by('id', 'desc')
 		                  ->get($this->tables['users']);
 
 		if ($query->num_rows() !== 1)
@@ -654,11 +646,7 @@ class Ion_auth_model extends CI_Model
 		$query = $this->db->select('id, password, salt')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
-<<<<<<< HEAD
-		  		  ->order_by('id', 'desc')
-=======
-		    			  ->order_by('id', 'desc')
->>>>>>> upstream/2
+											->order_by('id', 'desc')
 		                  ->get($this->tables['users']);
 
 		if ($query->num_rows() !== 1)
@@ -720,14 +708,9 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('extra_where');
 
 		return $this->db->where('username', $username)
-<<<<<<< HEAD
-				->order_by("id", "ASC")
-				->limit(1)
-=======
 										->group_by("id")
 										->order_by("id", "ASC")
 										->limit(1)
->>>>>>> upstream/2
 		                ->count_all_results($this->tables['users']) > 0;
 	}
 
@@ -749,14 +732,9 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('extra_where');
 
 		return $this->db->where('email', $email)
-<<<<<<< HEAD
-				->order_by("id", "ASC")
-				->limit(1)
-=======
 										->group_by("id")
 										->order_by("id", "ASC")
 										->limit(1)
->>>>>>> upstream/2
 		                ->count_all_results($this->tables['users']) > 0;
 	}
 
@@ -1210,11 +1188,7 @@ class Ion_auth_model extends CI_Model
 
 		$id = $this->db->insert_id();
 
-<<<<<<< HEAD
-		//add in groups array if it doesn't exits and stop adding into default group if default group ids are set
-=======
 		// add in groups array if it doesn't exits and stop adding into default group if default group ids are set
->>>>>>> upstream/2
 		if( isset($default_group->id) && empty($groups) )
 		{
 			$groups[] = $default_group->id;
@@ -1252,17 +1226,10 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-<<<<<<< HEAD
-		$query = $this->db->select($this->identity_column . ', username, email, id, password, otp, active, last_login')
-		                  ->where($this->identity_column, $identity)
-		                  ->limit(1)
-	    			  ->order_by('id', 'desc')
-=======
 		$query = $this->db->select($this->identity_column . ', email, id, password, active, last_login')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
-		    			  ->order_by('id', 'desc')
->>>>>>> upstream/2
+											->order_by('id', 'desc')
 		                  ->get($this->tables['users']);
 
 		if($this->is_time_locked_out($identity))
@@ -1832,11 +1799,7 @@ class Ion_auth_model extends CI_Model
 		// filter by group id(s) if passed
 		if (isset($groups))
 		{
-<<<<<<< HEAD
-			//build an array if only one group was passed
-=======
 			// build an array if only one group was passed
->>>>>>> upstream/2
 			if (!is_array($groups))
 			{
 				$groups = Array($groups);
@@ -1852,11 +1815,7 @@ class Ion_auth_model extends CI_Model
 				    'inner'
 				);
 			}
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> upstream/2
 			// verify if group name or group id was used and create and put elements in different arrays
 			$group_ids = array();
 			$group_names = array();
@@ -1866,11 +1825,7 @@ class Ion_auth_model extends CI_Model
 				else $group_names[] = $group;
 			}
 			$or_where_in = (!empty($group_ids) && !empty($group_names)) ? 'or_where_in' : 'where_in';
-<<<<<<< HEAD
-			//if group name was used we do one more join with groups
-=======
 			// if group name was used we do one more join with groups
->>>>>>> upstream/2
 			if(!empty($group_names))
 			{
 				$this->db->join($this->tables['groups'], $this->tables['users_groups'] . '.' . $this->join['groups'] . ' = ' . $this->tables['groups'] . '.id', 'inner');
@@ -1947,11 +1902,7 @@ class Ion_auth_model extends CI_Model
 		$id || $id = $this->session->userdata('user_id');
 
 		$this->limit(1);
-<<<<<<< HEAD
-		$this->order_by('id', 'desc');
-=======
 		$this->order_by($this->tables['users'].'.id', 'desc');
->>>>>>> upstream/2
 		$this->where($this->tables['users'].'.id', $id);
 
 		$this->users();
@@ -2373,11 +2324,7 @@ class Ion_auth_model extends CI_Model
 	{
 		$this->trigger_events('pre_login_remembered_user');
 
-<<<<<<< HEAD
-		//check for valid data
-=======
 		// check for valid data
->>>>>>> upstream/2
 		if (!get_cookie($this->config->item('identity_cookie_name', 'ion_auth'))
 			|| !get_cookie($this->config->item('remember_cookie_name', 'ion_auth'))
 			|| !$this->identity_check(get_cookie($this->config->item('identity_cookie_name', 'ion_auth'))))
@@ -2388,19 +2335,11 @@ class Ion_auth_model extends CI_Model
 
 		// get the user
 		$this->trigger_events('extra_where');
-<<<<<<< HEAD
-		$query = $this->db->select($this->identity_column.', id, username, email, last_login')
-		                  ->where($this->identity_column, get_cookie($this->config->item('identity_cookie_name', 'ion_auth')))
-		                  ->where('remember_code', get_cookie($this->config->item('remember_cookie_name', 'ion_auth')))
-		                  ->limit(1)
-	    			  ->order_by('id', 'desc')
-=======
 		$query = $this->db->select($this->identity_column.', id, email, last_login')
 		                  ->where($this->identity_column, get_cookie($this->config->item('identity_cookie_name', 'ion_auth')))
 		                  ->where('remember_code', get_cookie($this->config->item('remember_cookie_name', 'ion_auth')))
 		                  ->limit(1)
-		    			  ->order_by('id', 'desc')
->>>>>>> upstream/2
+											->order_by('id', 'desc')
 		                  ->get($this->tables['users']);
 
 		// if the user was found, sign them in

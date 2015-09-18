@@ -9,20 +9,12 @@
 * Author: Yngve Høiseth
 * 		  yngve.hoiseth@gmail.com
 *         @yhoiseth
-<<<<<<< HEAD
-* 
-=======
 *
->>>>>>> upstream/2
 * Location: http://github.com/benedmunds/ion_auth/
 *
 * Created:  01.01.2012
 * Last-Edit: 16.11.2014
-<<<<<<< HEAD
-* 
-=======
 *
->>>>>>> upstream/2
 * Description:  Norwegian language file for Ion Auth messages and errors
 *
 */
@@ -31,11 +23,7 @@
 $lang['account_creation_successful']			= 'Konto opprettet';
 $lang['account_creation_unsuccessful']			= 'Klarte ikke å opprette konto';
 $lang['account_creation_duplicate_email']		= 'Emailen er allerede i bruk eller ugyldig';
-<<<<<<< HEAD
-$lang['account_creation_duplicate_username']	= 'Brukernavnet er allerede i bruk eller ugyldig';
-=======
 $lang['account_creation_duplicate_identity']	= 'Brukernavnet er allerede i bruk eller ugyldig';
->>>>>>> upstream/2
 $lang['account_creation_missing_default_group'] = 'Standardgruppe er ikke valgt';
 $lang['account_creation_invalid_default_group'] = 'Ugyldig gruppenavn';
 
@@ -75,10 +63,7 @@ $lang['group_delete_successful']   = 'Gruppe slettet';
 $lang['group_delete_unsuccessful'] = 'Klarte ikke å slette gruppe';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required']	   = 'Gruppenavn må fylles inn';
-<<<<<<< HEAD
-=======
 $lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
->>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']  = 'Aktivering av konto';

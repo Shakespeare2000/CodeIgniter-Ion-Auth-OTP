@@ -2,19 +2,11 @@
 /**
 * Name:  Ion Auth Lang - Danish
 *
-<<<<<<< HEAD
-* Author: 
-*
-* Location: http://github.com/benedmunds/ion_auth/
-*
-* Created:  
-=======
 * Author:
 *
 * Location: http://github.com/benedmunds/ion_auth/
 *
 * Created:
->>>>>>> upstream/2
 *
 * Description:  Danish language file for Ion Auth messages and errors
 *
@@ -23,11 +15,7 @@
 $lang['account_creation_successful'] 			= 'Konto oprettet';
 $lang['account_creation_unsuccessful'] 			= 'Det var ikke muligt at oprette kontoen';
 $lang['account_creation_duplicate_email'] 		= 'Email allerede i brug eller ugyldig';
-<<<<<<< HEAD
-$lang['account_creation_duplicate_username'] 	= 'Brugernavn allerede i brug eller ugyldigt';
-=======
 $lang['account_creation_duplicate_identity'] 	= 'Brugernavn allerede i brug eller ugyldigt';
->>>>>>> upstream/2
 $lang['account_creation_missing_default_group'] = 'Default group is not set';
 $lang['account_creation_invalid_default_group'] = 'Invalid default group name set';
 // Password
@@ -61,11 +49,8 @@ $lang['group_delete_successful']    = 'Group deleted';
 $lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
-<<<<<<< HEAD
-=======
 $lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
 
->>>>>>> upstream/2
 // Activation Email
 $lang['email_activation_subject']            = 'Konto aktivering';
 $lang['email_activate_heading']    = 'Activate account for %s';

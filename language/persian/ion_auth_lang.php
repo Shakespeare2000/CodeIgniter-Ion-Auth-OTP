@@ -68,10 +68,7 @@ $lang['group_delete_successful']    = 'گروه حذف شد';
 $lang['group_delete_unsuccessful'] 	= 'امكان حذف گروه وجود ندارد';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'Group name is a required field';
-<<<<<<< HEAD
-=======
 $lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
->>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']            = 'فعال سازی حساب کاربري';

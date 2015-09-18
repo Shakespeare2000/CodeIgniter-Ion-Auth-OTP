@@ -23,11 +23,7 @@
 $lang['account_creation_successful'] 	  	 = 'สร้างบัญชีสำเร็จ';
 $lang['account_creation_unsuccessful'] 	 	 = 'ไม่สามารถสร้างบัญชีได้';
 $lang['account_creation_duplicate_email'] 	 = 'อีเมล์นี้ถูกใช้ไปแล้วหรือรูปแบบไม่ถูกต้อง';
-<<<<<<< HEAD
-$lang['account_creation_duplicate_username'] = 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้วหรือรูปแบบไม่ถูกต้อง';
-=======
 $lang['account_creation_duplicate_identity'] = 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้วหรือรูปแบบไม่ถูกต้อง';
->>>>>>> upstream/2
 $lang['account_creation_missing_default_group'] = 'กลุ่มปริยายยังไม่ถูกตั้ง';
 $lang['account_creation_invalid_default_group'] = 'ชื่อกลุ่มปริยายตั้งไม่ถูกต้อง';
 
@@ -67,10 +63,7 @@ $lang['group_delete_successful']    = 'กลุ่มถูกลบแล้�
 $lang['group_delete_unsuccessful'] 	= 'ไม่สามารถลบกลุ่มได้';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required'] 		= 'ต้องใส่ชื่อกลุ่ม';
-<<<<<<< HEAD
-=======
 $lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
->>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']            = 'การเปิดใช้บัญชี';

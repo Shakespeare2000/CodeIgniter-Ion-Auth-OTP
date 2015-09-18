@@ -21,19 +21,10 @@
 $lang['account_creation_successful']            = 'Compte créé avec succès';
 $lang['account_creation_unsuccessful']          = 'Impossible de créer le compte';
 $lang['account_creation_duplicate_email']       = 'Email déjà utilisé ou invalide';
-<<<<<<< HEAD
-$lang['account_creation_duplicate_username']    = 'Nom d\'utilisateur déjà utilisé ou invalide';
-$lang['account_creation_missing_default_group'] = 'Le groupe par défaut n\'est pas configuré';
-$lang['account_creation_invalid_default_group'] = 'Le nom du groupe par défaut n\'est pas valide';
- 
- 
-=======
 $lang['account_creation_duplicate_identity']    = 'Nom d\'utilisateur déjà utilisé ou invalide';
 $lang['account_creation_missing_default_group'] = 'Le groupe par défaut n\'est pas configuré';
 $lang['account_creation_invalid_default_group'] = 'Le nom du groupe par défaut n\'est pas valide';
 
-
->>>>>>> upstream/2
 // Password
 $lang['password_change_successful']   = 'Le mot de passe a été changé avec succès';
 $lang['password_change_unsuccessful'] = 'Impossible de changer le mot de passe';
@@ -47,11 +38,7 @@ $lang['deactivate_successful']         = 'Compte désactivé';
 $lang['deactivate_unsuccessful']       = 'Impossible de désactiver le compte';
 $lang['activation_email_successful']   = 'Email d\'activation envoyé avec succès';
 $lang['activation_email_unsuccessful'] = 'Impossible d\'envoyer l\'email d\'activation';
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> upstream/2
 // Login / Logout
 $lang['login_successful']              = 'Connecté avec succès';
 $lang['login_unsuccessful']            = 'Erreur lors de la connexion';
@@ -73,10 +60,7 @@ $lang['group_delete_successful']   = 'Groupe supprimé';
 $lang['group_delete_unsuccessful'] = 'Impossible de supprimer le groupe';
 $lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
 $lang['group_name_required']       = 'Le nom du groupe est un champ obligatoire';
-<<<<<<< HEAD
-=======
 $lang['group_name_admin_not_alter'] = 'Admin group name can not be changed';
->>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']  = 'Activation du compte';

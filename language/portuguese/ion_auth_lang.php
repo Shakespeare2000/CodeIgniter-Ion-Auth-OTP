@@ -19,11 +19,7 @@
 $lang['account_creation_successful']         	= 'Conta criada com sucesso';
 $lang['account_creation_unsuccessful']       	= 'Não foi possível criar a conta';
 $lang['account_creation_duplicate_email']    	= 'Email em uso ou inválido';
-<<<<<<< HEAD
-$lang['account_creation_duplicate_username'] 	= 'Nome de usuário em uso ou inválido';
-=======
 $lang['account_creation_duplicate_identity'] 	= 'Nome de usuário em uso ou inválido';
->>>>>>> upstream/2
 $lang['account_creation_missing_default_group'] = 'Grupo padrão não está definido';
 $lang['account_creation_invalid_default_group'] = 'Nome padrão do grupo definido é inválido';
 
@@ -62,10 +58,7 @@ $lang['group_delete_successful']            = 'Grupo excluído com sucesso';
 $lang['group_delete_unsuccessful']          = 'Não foi possível excluir o grupo';
 $lang['group_delete_notallowed']    		= 'Não é possível excluir o grupo de administradores';
 $lang['group_name_required'] 				= 'Nome do grupo é um campo obrigatório';
-<<<<<<< HEAD
-=======
 $lang['group_name_admin_not_alter'] 		= 'Nome do grupo administrador não pode ser alterado';
->>>>>>> upstream/2
 
 // Activation Email
 $lang['email_activation_subject']           = 'Ativação da conta';

@@ -109,7 +109,6 @@ $config['forgot_password_expiration'] = 0;                   // The number of mi
  */
 $config['remember_cookie_name'] = 'remember_code';
 $config['identity_cookie_name'] = 'identity';
-<<<<<<< HEAD
 
 /*
  | -------------------------------------------------------------------------
@@ -140,8 +139,6 @@ $config['otp']['code_length']			= 6; 			// The generated token length. Recommend
 $config['otp']['time_step']				= 30; 			// The generated token time step in seconds.
 
 
-=======
->>>>>>> upstream/2
 
 /*
  | -------------------------------------------------------------------------

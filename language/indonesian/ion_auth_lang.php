@@ -5,18 +5,6 @@
 * Author: Toni Haryanto
 * 		  toha.samba@gmail.com
 *         @yllumi
-<<<<<<< HEAD
-* 
-* Author: Daeng Muhammad Feisal
-*         daengdoang@gmail.com
-*         @daengdoang
-* 
-* Location: https://github.com/yllumi/CodeIgniter-Ion-Auth
-*          
-* Created:  11.15.2011
-* Edited:   June 21st 2014 :D
-* 
-=======
 *
 * Author: Daeng Muhammad Feisal
 *         daengdoang@gmail.com
@@ -31,7 +19,6 @@
 * Created:  11.15.2011
 * Last-Edit:   June 27th 2015
 *
->>>>>>> upstream/2
 * Description:  Indonesian language file for Ion Auth messages and errors
 *
 */
@@ -66,42 +53,6 @@ $lang['activation_email_successful']			    = 'Email untuk Aktivasi Telah Dikirim
 $lang['activation_email_unsuccessful']		        = 'Tidak Dapat Mengirimkan Email Aktivasi';
 
 // Login / Logout
-<<<<<<< HEAD
-$lang['login_successful'] 		  	 = 'Log In Berhasil';
-$lang['login_unsuccessful'] 		  	 = 'Log In Gagal';
-$lang['login_unsuccessful_not_active'] 		 = 'Account is inactive';
-$lang['login_timeout']                       = 'Temporarily Locked Out.  Try again later.';
-$lang['logout_successful'] 		 	 = 'Log Out Berhasil';
-  
-// Account Changes
-$lang['update_successful'] 		 	 = 'Informasi Akun Berhasil Diperbaharui';
-$lang['update_unsuccessful'] 		 	 = 'Tidak Dapat Memperbaharui Informasi Akun';
-$lang['delete_successful'] 		 	 = 'Pengguna Telah Dihapus';
-$lang['delete_unsuccessful'] 		 	 = 'Tidak Dapat Menghapus Pengguna';
-
-// Groups
-$lang['group_creation_successful']  = 'Group created Successfully';
-$lang['group_already_exists']       = 'Group name already taken';
-$lang['group_update_successful']    = 'Group details updated';
-$lang['group_delete_successful']    = 'Group deleted';
-$lang['group_delete_unsuccessful'] 	= 'Unable to delete group';
-$lang['group_delete_notallowed']    = 'Can\'t delete the administrators\' group';
-$lang['group_name_required'] 		= 'Group name is a required field';
-// Activation Email
-$lang['email_activation_subject']            = 'Aktivasi Akun';
-$lang['email_activate_heading']    = 'Activate account for %s';
-$lang['email_activate_subheading'] = 'Please click this link to %s.';
-$lang['email_activate_link']       = 'Activate Your Account';
-// Forgot Password Email
-$lang['email_forgotten_password_subject']    = 'Lupa Verifikasi Password';
-$lang['email_forgot_password_heading']    = 'Reset Password for %s';
-$lang['email_forgot_password_subheading'] = 'Please click this link to %s.';
-$lang['email_forgot_password_link']       = 'Reset Your Password';
-// New Password Email
-$lang['email_new_password_subject']          = 'New Password';
-$lang['email_new_password_heading']    = 'New Password for %s';
-$lang['email_new_password_subheading'] = 'Your password has been reset to: %s';
-=======
 $lang['login_successful']							= 'Log In Berhasil';
 $lang['login_unsuccessful']							= 'Log In Gagal';
 $lang['login_unsuccessful_not_active']	            = 'Akun Tidak Aktif';
@@ -140,4 +91,3 @@ $lang['email_forgot_password_link']					= 'Setel Ulang Kata Sandi';
 $lang['email_new_password_subject']					= 'Kata Sandi Baru';
 $lang['email_new_password_heading']					= 'Kata Sandi Baru Untuk %s';
 $lang['email_new_password_subheading']			    = 'Kata Sandi Telah Diubah Ke: %s';
->>>>>>> upstream/2

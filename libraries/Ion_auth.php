@@ -60,11 +60,7 @@ class Ion_auth
 	public function __construct()
 	{
 		$this->load->config('ion_auth', TRUE);
-<<<<<<< HEAD
 		$this->load->library(array('email', 'google_authenticator'));
-=======
-		$this->load->library(array('email'));
->>>>>>> upstream/2
 		$this->lang->load('ion_auth');
 		$this->load->helper(array('cookie', 'language','url'));
 
@@ -421,20 +417,7 @@ class Ion_auth
 
 		$identity = $this->config->item('identity', 'ion_auth');
 
-<<<<<<< HEAD
-		//delete the remember me cookies if they exist
-=======
-                if (substr(CI_VERSION, 0, 1) == '2')
-		{
-			$this->session->unset_userdata( array($identity => '', 'id' => '', 'user_id' => '') );
-                }
-                else
-                {
-                	$this->session->unset_userdata( array($identity, 'id', 'user_id') );
-                }
-
 		// delete the remember me cookies if they exist
->>>>>>> upstream/2
 		if (get_cookie($this->config->item('identity_cookie_name', 'ion_auth')))
 		{
 			delete_cookie($this->config->item('identity_cookie_name', 'ion_auth'));
